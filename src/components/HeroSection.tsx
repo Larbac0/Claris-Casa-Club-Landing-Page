@@ -2,9 +2,7 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from './ui/button';
 import { ImageWithFallback } from './ui/ImageWithFallback';
-// Update the path below to the correct location of your hero image
-// Use the image URL directly as a string
-const heroImage = 'https://lancamento.invexo.com.br/wp-content/uploads/2025/02/claris-casa-e-clube-barra-da-tijuca-rio-de-janeiro-rj-2-2048x1152.jpg';
+const heroImage = 'https://images.unsplash.com/photo-1600566752229-450c087191cc?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80';
 
 export function HeroSection() {
   const [isVisible, setIsVisible] = useState(false);

@@ -1,138 +1,168 @@
 import { motion } from 'framer-motion';
-import { Award, Clock, Shield, Users } from 'lucide-react';
+import { Award, Shield, Clock, Star } from 'lucide-react';
 import { ImageWithFallback } from './ui/ImageWithFallback';
 
-const highlights = [
-  {
-    icon: Clock,
-    title: 'Pontualidade',
-    description: 'Entregas no prazo prometido'
-  },
+const excellenceFeatures = [
   {
     icon: Award,
-    title: 'Qualidade',
-    description: 'Padrão premium em cada detalhe'
+    title: '30 Anos de Mercado',
+    description: 'Experiência consolidada em empreendimentos de alto padrão',
+    color: 'from-blue-500 to-blue-600'
   },
   {
     icon: Shield,
-    title: 'Discrição',
-    description: 'Atendimento reservado e exclusivo'
+    title: 'Garantia Total',
+    description: 'Cobertura completa com assistência técnica especializada',
+    color: 'from-green-500 to-green-600'
   },
   {
-    icon: Users,
+    icon: Clock,
+    title: 'Pontualidade',
+    description: 'Entregas rigorosamente dentro do prazo estabelecido',
+    color: 'from-purple-500 to-purple-600'
+  },
+  {
+    icon: Star,
     title: 'Excelência',
-    description: 'Satisfação garantida'
+    description: 'Padrão de qualidade superior em todos os detalhes',
+    color: 'from-[#D4AF37] to-[#B8941F]'
   }
 ];
 
 export function ExcellenceSection() {
   return (
-    <section className="py-20 bg-gradient-to-br from-gray-800 to-gray-900 relative overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <ImageWithFallback
-          src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
-          alt="Excellence Background"
-          className="w-full h-full object-cover"
-        />
-      </div>
-      
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="text-center mb-16">
+    <section className="py-20 bg-white">
+      <div className="container mx-auto px-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          {/* Content Column */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="inline-block mb-8"
           >
-            <div className="w-24 h-24 bg-[#D4AF37] rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl">
-              <span className="text-3xl font-bold text-black">30+</span>
-            </div>
-            <div className="w-32 h-1 bg-[#D4AF37] rounded-full mx-auto"></div>
-          </motion.div>
-          
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            viewport={{ once: true }}
-            className="text-4xl md:text-6xl text-white mb-8 font-serif leading-tight"
-          >
-            Mais de <span className="text-[#D4AF37]">30 anos</span><br />
-            de excelência
-          </motion.h2>
-          
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            viewport={{ once: true }}
-            className="text-2xl md:text-3xl text-white/90 max-w-4xl mx-auto font-serif italic"
-          >
-            "Pontualidade, qualidade e discrição para quem valoriza o melhor."
-          </motion.p>
-        </div>
-
-        {/* Excellence Pillars */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-16">
-          {highlights.map((highlight, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.15 }}
-              viewport={{ once: true }}
-              whileHover={{ scale: 1.05, y: -10 }}
-              className="text-center group"
-            >
-              <div className="relative">
-                <motion.div
-                  whileHover={{ scale: 1.1, rotate: 360 }}
-                  transition={{ duration: 0.5 }}
-                  className="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-6 border border-white/20 group-hover:bg-[#D4AF37]/20 group-hover:border-[#D4AF37]/50 transition-all duration-300"
-                >
-                  <highlight.icon className="w-10 h-10 text-[#D4AF37]" />
-                </motion.div>
-                
-                {/* Connecting Line */}
-                {index < highlights.length - 1 && (
-                  <div className="hidden lg:block absolute top-10 left-full w-full h-px bg-gradient-to-r from-[#D4AF37]/30 to-transparent"></div>
-                )}
-              </div>
-              
-              <h3 className="text-xl text-white mb-3 font-serif font-medium">
-                {highlight.title}
-              </h3>
-              <p className="text-white/70 text-sm leading-relaxed">
-                {highlight.description}
+            <div className="mb-8">
+              <h2 className="text-4xl md:text-5xl text-gray-800 mb-6 font-serif">
+                Compromisso com a <span className="text-[#D4AF37]">Excelência</span>
+              </h2>
+              <p className="text-xl text-gray-600 leading-relaxed">
+                Mais que uma construtora, somos parceiros na realização do seu sonho. 
+                Nossa reputação foi construída com base na confiança e na entrega de resultados excepcionais.
               </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {excellenceFeatures.map((feature, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  whileHover={{ scale: 1.05 }}
+                  className="group"
+                >
+                  <div className="bg-gray-50 rounded-2xl p-6 hover:bg-white hover:shadow-lg transition-all duration-300 border border-transparent hover:border-gray-100">
+                    <div className={`w-12 h-12 bg-gradient-to-r ${feature.color} rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                      <feature.icon className="w-6 h-6 text-white" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                      {feature.title}
+                    </h3>
+                    <p className="text-gray-600 text-sm leading-relaxed">
+                      {feature.description}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+              viewport={{ once: true }}
+              className="mt-8 p-6 bg-[#D4AF37]/10 rounded-2xl border border-[#D4AF37]/20"
+            >
+              <div className="flex items-start gap-4">
+                <div className="w-2 h-2 bg-[#D4AF37] rounded-full mt-2 flex-shrink-0"></div>
+                <div>
+                  <p className="text-gray-700 font-medium mb-2">
+                    Certificação de Qualidade ISO 9001
+                  </p>
+                  <p className="text-gray-600 text-sm leading-relaxed">
+                    Processos padronizados e auditados garantem a máxima qualidade 
+                    em todas as etapas da construção, desde o planejamento até a entrega das chaves.
+                  </p>
+                </div>
+              </div>
             </motion.div>
-          ))}
+          </motion.div>
+
+          {/* Image Column */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="relative"
+          >
+            <div className="relative z-10">
+              <ImageWithFallback
+                src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2075&q=80"
+                alt="Construção de Qualidade"
+                className="w-full h-96 object-cover rounded-3xl shadow-2xl"
+              />
+              
+              {/* Floating Stats Card */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.6 }}
+                viewport={{ once: true }}
+                className="absolute -bottom-6 -left-6 bg-white rounded-2xl shadow-2xl p-6 border border-gray-100"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-[#D4AF37] rounded-full flex items-center justify-center">
+                    <Award className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold text-gray-800">98%</p>
+                    <p className="text-sm text-gray-600">Satisfação dos clientes</p>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Background Decoration */}
+            <div className="absolute -top-4 -right-4 w-24 h-24 bg-[#D4AF37]/10 rounded-full blur-xl"></div>
+            <div className="absolute -bottom-8 -right-8 w-32 h-32 bg-gray-200/50 rounded-full blur-2xl"></div>
+          </motion.div>
         </div>
 
-        {/* Trust Indicators */}
+        {/* Bottom Stats Row */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
+          transition={{ duration: 0.8, delay: 0.7 }}
           viewport={{ once: true }}
-          className="mt-20 text-center"
+          className="mt-20 grid grid-cols-1 md:grid-cols-4 gap-8"
         >
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
-              <div className="text-3xl text-[#D4AF37] font-bold mb-2">500+</div>
-              <p className="text-white/80 text-sm">Unidades entregues</p>
+          {[
+            { number: '500+', label: 'Unidades entregues' },
+            { number: '30', label: 'Anos de experiência' },
+            { number: '15', label: 'Prêmios recebidos' },
+            { number: '99%', label: 'Entregas no prazo' }
+          ].map((stat, index) => (
+            <div key={index} className="text-center">
+              <div className="text-3xl md:text-4xl font-bold text-[#D4AF37] mb-2">
+                {stat.number}
+              </div>
+              <div className="text-gray-600 font-medium">
+                {stat.label}
+              </div>
             </div>
-            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
-              <div className="text-3xl text-[#D4AF37] font-bold mb-2">98%</div>
-              <p className="text-white/80 text-sm">Satisfação dos clientes</p>
-            </div>
-            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
-              <div className="text-3xl text-[#D4AF37] font-bold mb-2">30+</div>
-              <p className="text-white/80 text-sm">Anos de experiência</p>
-            </div>
-          </div>
+          ))}
         </motion.div>
       </div>
     </section>

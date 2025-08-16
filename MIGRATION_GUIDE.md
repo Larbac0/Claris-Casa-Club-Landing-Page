@@ -23,44 +23,28 @@ Este documento contém as instruções para completar a migração do projeto Cl
 
 ### 1. Copiar Componentes Restantes
 
-Copie os seguintes componentes do projeto original para `src/components/`:
+Copie todos os componentes da pasta `components/` do projeto original para `src/components/`:
 
 ```bash
-# Componentes principais faltantes
-- ExclusiveServices.tsx
-- ExcellenceSection.tsx  
-- StrategicLocation.tsx
-- TargetAudience.tsx
-- FinalCTA.tsx
-- WhatsAppButton.tsx
-- AdminDashboard.tsx
+# Copie os seguintes arquivos para src/components/:
+cp ../components/ExclusiveServices.tsx src/components/
+cp ../components/ExcellenceSection.tsx src/components/
+cp ../components/StrategicLocation.tsx src/components/
+cp ../components/TargetAudience.tsx src/components/
+cp ../components/FinalCTA.tsx src/components/
+cp ../components/WhatsAppButton.tsx src/components/
+cp ../components/AdminDashboard.tsx src/components/
+cp ../components/FloorPlanCarousel.tsx src/components/
+cp ../components/VideoModal.tsx src/components/
 ```
 
-### 2. Copiar Componentes UI
+### 2. Copiar Componentes UI Restantes
 
-Copie todos os componentes UI faltantes para `src/components/ui/`:
+Copie todos os componentes UI restantes da pasta `components/ui/`:
 
 ```bash
-# Lista de componentes UI necessários
-- accordion.tsx
-- alert-dialog.tsx
-- alert.tsx
-- avatar.tsx
-- badge.tsx
-- card.tsx
-- checkbox.tsx
-- dialog.tsx
-- form.tsx
-- label.tsx
-- popover.tsx
-- select.tsx
-- separator.tsx
-- sheet.tsx
-- table.tsx
-- tabs.tsx
-- textarea.tsx
-- tooltip.tsx
-# ... e outros conforme necessário
+# Copie os seguintes arquivos para src/components/ui/:
+cp ../components/ui/*.tsx src/components/ui/
 ```
 
 ### 3. Ajustar Imports
