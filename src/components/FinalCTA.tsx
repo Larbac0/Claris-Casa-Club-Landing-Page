@@ -139,7 +139,7 @@ export function FinalCTA() {
       {/* Background with overlay */}
       <div className="absolute inset-0">
         <ImageWithFallback
-          src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&auto=format&fit=crop&w=2071&q=80"
+          src="/public/img/AKX_04_Perspectiva Ilustrada da Fachada Jasmin_REV_03_00.jpg"
           alt="Claris Casa & Club"
           className="w-full h-full object-cover"
         />

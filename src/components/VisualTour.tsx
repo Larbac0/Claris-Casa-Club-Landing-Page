@@ -82,11 +82,11 @@ const gallerySections: GallerySection[] = [
     description: "Área de lazer exclusiva",
     images: [
       {
-        src: "https://lopesrio.com.br/claris-casa-e-clube-casa-na-barra-da-tijuca/?gad_source=1&gad_campaignid=18990717114&gclid=CjwKCAjw7_DEBhAeEiwAWKiCC2o47xhtLdSwt9R5-Q6km5K699OlG6WaDKqpZHawO9wr3oI6PIAruRoCqzwQAvD_BwE#gallery-11",
+        src: "/public/img/Piscina.jpg",
         alt: "Piscina Principal",
       },
       {
-        src: "https://images.unsplash.com/photo-1544984243-ec57ea16fe25?ixlib=rb-4.0.3&auto=format&fit=crop&w=2074&q=80",
+        src: "/public/img/Piscina 2.jpg",
         alt: "Piscina Vista Aérea",
       },
     ],
@@ -467,7 +467,7 @@ export function VisualTour() {
             <div className="relative overflow-hidden rounded-2xl h-80 md:h-96">
               {/* Before Image */}
               <ImageWithFallback
-                src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+                src=""
                 alt="Antes - Terreno"
                 className="absolute inset-0 w-full h-full object-cover"
                 style={{
@@ -477,7 +477,7 @@ export function VisualTour() {
 
               {/* After Image */}
               <ImageWithFallback
-                src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&auto=format&fit=crop&w=2071&q=80"
+                src="/public/img/Entrada.jpg"
                 alt="Depois - Claris Casa & Club"
                 className="absolute inset-0 w-full h-full object-cover"
                 style={{
