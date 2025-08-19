@@ -1,27 +1,27 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Car, Shield, Waves, TreePine, Users, MapPin, Home, Wrench, Calendar, DollarSign } from 'lucide-react';
+import { Car, Shield, Waves, TreePine, Users, MapPin, Home, Wrench, Calendar, DollarSign, Bed } from 'lucide-react';
 
 const benefits = [
   {
     icon: Home,
     title: "Casas de 318 m² a 580 m²",
-    description: "Arquitetura moderna com espaços generosos"
+    description: "Arquitetura moderna com espaços generosos."
   },
   {
     icon: Users,
     title: "Apenas 99 unidades",
-    description: "Condomínio fechado com exclusividade garantida"
+    description: "Condomínio fechado com exclusividade garantida situado em uma das áreas mais nobres da Zona Oeste do Rio."
   },
   {
     icon: Car,
     title: "Garagem Subterrânea Privativa",
-    description: "Com automação e segurança máxima"
+    description: "Com segurança e ótimo espaço para até 3 veículos"
   },
   {
     icon: TreePine,
     title: "Jardins Privativos",
-    description: "Plantas flexíveis para seu estilo de vida"
+    description: " Opções com gardens de 40 até 250 m²."
   },
   {
     icon: Waves,
@@ -52,6 +52,11 @@ const benefits = [
     icon: Calendar,
     title: "Entregas Programadas",
     description: "Agosto/2026 (fase 1) • Julho/2027 (fase 2)"
+  },
+  {
+    icon: Bed,
+    title: "Suítes",
+    description: "Casas de 3 e 4 suítes para conforto e privacidade"
   }
 ];
 

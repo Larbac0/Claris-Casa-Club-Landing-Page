@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from './ui/button';
 import { ImageWithFallback } from './ui/ImageWithFallback';
-const heroImage = 'https://images.unsplash.com/photo-1600566752229-450c087191cc?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80';
+const heroImage = '/public/img/Fachada 2.jpg';
 
 export function HeroSection() {
   const [isVisible, setIsVisible] = useState(false);

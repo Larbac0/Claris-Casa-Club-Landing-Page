@@ -10,7 +10,7 @@ const services = [
     icon: FileText,
     title: 'Plantas Privativas',
     description: 'Layouts sofisticados e pensados para o seu estilo de vida.',
-    image: 'https://images.unsplash.com/photo-1600566752229-450c087191cc?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80'
+    image: '/public/img/plantas/Planta condomínio.jpg'
   },
   {
     icon: Play,
