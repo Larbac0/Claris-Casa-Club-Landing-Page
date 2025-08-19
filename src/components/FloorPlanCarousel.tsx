@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronLeft, ChevronRight, Home, Maximize2, Bed } from 'lucide-react';
 import { Dialog, DialogContent, DialogTitle } from './ui/dialog';
