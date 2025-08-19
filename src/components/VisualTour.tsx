@@ -467,7 +467,7 @@ export function VisualTour() {
             <div className="relative overflow-hidden rounded-2xl h-80 md:h-96">
               {/* Before Image */}
               <ImageWithFallback
-                src=""
+                src="/public/img/Entrada.jpeg"
                 alt="Antes - Terreno"
                 className="absolute inset-0 w-full h-full object-cover"
                 style={{
