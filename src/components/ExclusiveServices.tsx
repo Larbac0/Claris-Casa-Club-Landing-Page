@@ -2,14 +2,13 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FileText, Play, UserCheck } from 'lucide-react';
 import { ImageWithFallback } from './ui/ImageWithFallback';
-import { FloorPlanCarousel } from './FloorPlanCarousel';
 import { VideoModal } from './VideoModal';
 
 const services = [
   {
     icon: FileText,
     title: 'Plantas Privativas',
-    description: 'Layouts sofisticados e pensados para o seu estilo de vida.',
+    description: 'Acesse o memorial completo com todas as plantas e layouts exclusivos.',
     image: 'https://images.unsplash.com/photo-1600566752229-450c087191cc?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80'
   },
   {
@@ -28,13 +27,24 @@ const services = [
 ];
 
 export function ExclusiveServices() {
-  const [showFloorPlans, setShowFloorPlans] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
 
   const handleServiceClick = (index: number) => {
     if (index === 0) {
-      // Plantas Privativas - Open carousel
-      setShowFloorPlans(true);
+      // Plantas Privativas - Open PDF
+      const pdfPath = '/assets/plantas-claris.pdf';
+      // Verificar se o arquivo existe antes de abrir
+      fetch(pdfPath, { method: 'HEAD' })
+        .then(response => {
+          if (response.ok) {
+            window.open(pdfPath, '_blank');
+          } else {
+            alert('PDF das plantas não encontrado. Por favor, adicione o arquivo "plantas-claris.pdf" na pasta public/assets/');
+          }
+        })
+        .catch(() => {
+          alert('PDF das plantas não encontrado. Por favor, adicione o arquivo "plantas-claris.pdf" na pasta public/assets/');
+        });
     } else if (index === 1) {
       // Tour Imersivo - Open video modal
       setShowVideo(true);
@@ -100,6 +110,22 @@ export function ExclusiveServices() {
                     </div>
                   </div>
                   
+                  {/* PDF Button for Plants */}
+                  {index === 0 && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <motion.div
+                        whileHover={{ scale: 1.1 }}
+                        className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center cursor-pointer shadow-xl hover:bg-white transition-colors duration-300"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleServiceClick(0);
+                        }}
+                      >
+                        <FileText className="w-8 h-8 text-[#D4AF37]" />
+                      </motion.div>
+                    </div>
+                  )}
+                  
                   {/* Play Button for Video */}
                   {service.hasModal && (
                     <div className="absolute inset-0 flex items-center justify-center">
@@ -144,7 +170,7 @@ export function ExclusiveServices() {
                       </button>
                     ) : (
                       <button className="text-[#D4AF37] hover:text-[#B8941F] font-medium transition-colors duration-300">
-                        Saiba mais →
+                        {index === 0 ? 'Ver Plantas →' : 'Saiba mais →'}
                       </button>
                     )}
                   </div>
@@ -169,17 +195,10 @@ export function ExclusiveServices() {
         </div>
       </section>
 
-      {/* Floor Plans Carousel Modal */}
-      <FloorPlanCarousel 
-        isOpen={showFloorPlans} 
-        onClose={() => setShowFloorPlans(false)} 
-      />
-
       {/* Video Modal */}
       <VideoModal 
         isOpen={showVideo} 
         onClose={() => setShowVideo(false)} 
-        
       />
     </>
   );
