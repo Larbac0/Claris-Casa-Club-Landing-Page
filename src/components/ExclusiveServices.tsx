@@ -32,7 +32,7 @@ export function ExclusiveServices() {
   const handleServiceClick = (index: number) => {
     if (index === 0) {
       // Plantas Privativas - Open PDF
-      const pdfPath = '/assets/plantas-claris.pdf';
+      const pdfPath = '/assets/Book Plantas.pdf';
       // Verificar se o arquivo existe antes de abrir
       fetch(pdfPath, { method: 'HEAD' })
         .then(response => {
