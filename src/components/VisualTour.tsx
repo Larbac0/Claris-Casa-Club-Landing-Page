@@ -82,11 +82,11 @@ const gallerySections: GallerySection[] = [
     description: "Área de lazer exclusiva",
     images: [
       {
-        src: "/public/img/Piscina.jpg",
+        src: "/img/Piscina.jpg",
         alt: "Piscina Principal",
       },
       {
-        src: "/public/img/Piscina 2.jpg",
+        src: "/img/Piscina 2.jpg",
         alt: "Piscina Vista Aérea",
       },
     ],
@@ -467,7 +467,7 @@ export function VisualTour() {
             <div className="relative overflow-hidden rounded-2xl h-80 md:h-96">
               {/* Before Image */}
               <ImageWithFallback
-                src="/public/img/Entrada.jpeg"
+                src="/img/Entrada.jpeg"
                 alt="Antes - Terreno"
                 className="absolute inset-0 w-full h-full object-cover"
                 style={{
@@ -477,7 +477,7 @@ export function VisualTour() {
 
               {/* After Image */}
               <ImageWithFallback
-                src="/public/img/Entrada.jpg"
+                src="/img/Entrada.jpg"
                 alt="Depois - Claris Casa & Club"
                 className="absolute inset-0 w-full h-full object-cover"
                 style={{
