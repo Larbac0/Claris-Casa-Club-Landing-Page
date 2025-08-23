@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { HeroSection } from "./components/HeroSection";
 import { WhyClaris } from "./components/WhyClaris";
 import { VisualTour } from "./components/VisualTour";
