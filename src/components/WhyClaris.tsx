@@ -1,4 +1,3 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import { Car, Shield, Waves, TreePine, Users, MapPin, Home, Wrench, Calendar, DollarSign, Bed } from 'lucide-react';
 

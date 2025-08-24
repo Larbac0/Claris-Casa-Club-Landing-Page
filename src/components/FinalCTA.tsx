@@ -7,9 +7,6 @@ import { Textarea } from './ui/textarea';
 import { Checkbox } from './ui/checkbox';
 import { ImageWithFallback } from './ui/ImageWithFallback';
 
-// Standalone form handler - no Supabase dependencies
-const EMAIL_SERVICE_URL = 'https://formsubmit.co/contato@clariscasaclub.com';
-
 export function FinalCTA() {
   const [formData, setFormData] = useState({
     name: '',
@@ -60,72 +57,77 @@ export function FinalCTA() {
   }, [unitsAvailable]);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setSubmitStatus('idle');
+  e.preventDefault();
+  setIsSubmitting(true);
+  setSubmitStatus('idle');
 
-    try {
-      // Send to Supabase backend
-      const response = await fetch(`https://${projectId}.supabase.co/functions/v1/make-server-17b725d2/submit-contact`, {
-        method: 'POST',
+  try {
+    const response = await fetch(
+      `https://api.hsforms.com/submissions/v3/integration/submit/50401797/ec59b695-8d5a-46a2-a55a-8b97816bcce7`,
+      {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${publicAnonKey}`,
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          fields: [
+            { name: "firstname", value: formData.name },
+            { name: "email", value: formData.email },
+            { name: "phone", value: formData.phone },
+            { name: "message", value: formData.message },
+          ],
+          context: {
+            pageUri: window.location.href,
+            pageName: document.title,
+          },
+        }),
+      }
+    );
+
+    if (response.ok) {
+      setSubmitStatus("success");
+      setSubmitMessage("Obrigado! Seus dados foram enviados com sucesso. Em breve entraremos em contato.");
+
+      // Reset form
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        message: "",
+        whatsappConsent: false,
       });
 
-      const result = await response.json();
-
-      if (response.ok && result.success) {
-        setSubmitStatus('success');
-        setSubmitMessage('Obrigado! Seus dados foram enviados com sucesso. Entraremos em contato em breve.');
-        
-        // Reset form
-        setFormData({
-          name: '',
-          email: '',
-          phone: '',
-          message: '',
-          whatsappConsent: false
+      // Pixel & Analytics (igual você já tinha)
+      if (typeof window !== "undefined" && (window as any).gtag) {
+        (window as any).gtag("event", "form_submit", {
+          event_category: "engagement",
+          event_label: "contact_form_hubspot",
+          value: 1,
         });
-
-        // Simulate unit decrease
-        setTimeout(() => {
-          setUnitsAvailable(prev => Math.max(prev - 1, 1));
-        }, 2000);
-
-        // Track event if analytics available
-        if (typeof window !== 'undefined' && typeof (window as any).gtag !== 'undefined') {
-          (window as any).gtag('event', 'form_submit', {
-            event_category: 'engagement',
-            event_label: 'contact_form_supabase',
-            value: 1
-          });
-        }
-
-        // Send analytics event for lead conversion
-        if (typeof window !== 'undefined' && typeof (window as any).fbq !== 'undefined') {
-          (window as any).fbq('track', 'Lead', {
-            content_name: 'Claris Casa & Club Contact Form',
-            value: 1,
-            currency: 'BRL'
-          });
-        }
-
-      } else {
-        setSubmitStatus('error');
-        setSubmitMessage(result.error || 'Erro ao enviar formulário. Tente novamente.');
-        console.error('Form submission error:', result);
       }
-    } catch (error) {
-      console.error('Error submitting form:', error);
-      setSubmitStatus('error');
-      setSubmitMessage('Erro de conexão. Verifique sua internet e tente novamente.');
-    } finally {
-      setIsSubmitting(false);
+
+      if (typeof window !== "undefined" && (window as any).fbq) {
+        (window as any).fbq("track", "Lead", {
+          content_name: "Claris Casa & Club Contact Form",
+          value: 1,
+          currency: "BRL",
+        });
+      }
+
+    } else {
+      setSubmitStatus("error");
+      setSubmitMessage("Erro ao enviar formulário. Tente novamente.");
+      console.error(await response.json());
     }
-  };
+  } catch (error) {
+    console.error("Error submitting form:", error);
+    setSubmitStatus("error");
+    setSubmitMessage("Erro de conexão. Verifique sua internet e tente novamente.");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 
   const handleInputChange = (field: string, value: string | boolean) => {
     setFormData(prev => ({
@@ -268,6 +270,7 @@ export function FinalCTA() {
                     <Input
                       type="text"
                       placeholder="Seu nome completo"
+                      name="name"
                       value={formData.name}
                       onChange={(e) => handleInputChange('name', e.target.value)}
                       className="w-full h-12 px-4 border border-gray-300 rounded-lg focus:border-[#D4AF37] focus:ring-2 focus:ring-[#D4AF37]/20"
@@ -279,6 +282,7 @@ export function FinalCTA() {
                     <Input
                       type="email"
                       placeholder="Seu melhor e-mail"
+                      name="email"
                       value={formData.email}
                       onChange={(e) => handleInputChange('email', e.target.value)}
                       className="w-full h-12 px-4 border border-gray-300 rounded-lg focus:border-[#D4AF37] focus:ring-2 focus:ring-[#D4AF37]/20"
@@ -290,6 +294,7 @@ export function FinalCTA() {
                     <Input
                       type="tel"
                       placeholder="WhatsApp com DDD"
+                      name="phone"
                       value={formData.phone}
                       onChange={(e) => handleInputChange('phone', e.target.value)}
                       className="w-full h-12 px-4 border border-gray-300 rounded-lg focus:border-[#D4AF37] focus:ring-2 focus:ring-[#D4AF37]/20"
@@ -300,6 +305,7 @@ export function FinalCTA() {
                   <div>
                     <Textarea
                       placeholder="Como podemos ajudar? (opcional)"
+                      name="message"
                       value={formData.message}
                       onChange={(e) => handleInputChange('message', e.target.value)}
                       className="w-full h-24 px-4 py-3 border border-gray-300 rounded-lg focus:border-[#D4AF37] focus:ring-2 focus:ring-[#D4AF37]/20 resize-none"
@@ -309,6 +315,7 @@ export function FinalCTA() {
                   <div className="flex items-center space-x-2">
                     <Checkbox
                       id="whatsapp-consent"
+                      name="whatsappConsent"
                       checked={formData.whatsappConsent}
                       onCheckedChange={(checked) => handleInputChange('whatsappConsent', checked as boolean)}
                       className="border-[#D4AF37] data-[state=checked]:bg-[#D4AF37]"
