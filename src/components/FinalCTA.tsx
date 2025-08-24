@@ -84,6 +84,9 @@ export function FinalCTA() {
       }
     );
 
+
+
+
     if (response.ok) {
       setSubmitStatus("success");
       setSubmitMessage("Obrigado! Seus dados foram enviados com sucesso. Em breve entraremos em contato.");
@@ -127,7 +130,6 @@ export function FinalCTA() {
     setIsSubmitting(false);
   }
 };
-
 
   const handleInputChange = (field: string, value: string | boolean) => {
     setFormData(prev => ({
