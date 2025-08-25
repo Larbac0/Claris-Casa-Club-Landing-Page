@@ -31,10 +31,10 @@ export function AdminDashboard() {
   const fetchLeads = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`https://${projectId}.supabase.co/functions/v1/make-server-17b725d2/leads`, {
+      const response = await fetch(`https://xvnjaxbrlvvdufbcaysd.supabase.co/functions/v1/make-server-17b725d2/leads`, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${publicAnonKey}`,
+          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh2bmpheGJybHZ2ZHVmYmNheXNkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4NjkxMDAsImV4cCI6MjA3MTQ0NTEwMH0.lYH5EVW66A4FwFnCKTvchmiSpZTvbvvDwxu1rC3rZfA`,
         },
       });
 
