@@ -16,45 +16,11 @@ export function FinalCTA() {
     whatsappConsent: false
   });
   
-  const [unitsAvailable, setUnitsAvailable] = useState(12);
-  const [timeLeft, setTimeLeft] = useState({
-    hours: 23,
-    minutes: 45,
-    seconds: 30
-  });
-  
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [submitMessage, setSubmitMessage] = useState('');
 
-  // Countdown timer
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(prev => {
-        if (prev.seconds > 0) {
-          return { ...prev, seconds: prev.seconds - 1 };
-        } else if (prev.minutes > 0) {
-          return { ...prev, minutes: prev.minutes - 1, seconds: 59 };
-        } else if (prev.hours > 0) {
-          return { hours: prev.hours - 1, minutes: 59, seconds: 59 };
-        }
-        return prev;
-      });
-    }, 1000);
 
-    return () => clearInterval(timer);
-  }, []);
-
-  // Simulate dynamic units (no server required)
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (Math.random() > 0.97 && unitsAvailable > 5) {
-        setUnitsAvailable(prev => prev - 1);
-      }
-    }, 30000);
-
-    return () => clearInterval(interval);
-  }, [unitsAvailable]);
 
   const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
@@ -143,7 +109,7 @@ export function FinalCTA() {
       {/* Background with overlay */}
       <div className="absolute inset-0">
         <ImageWithFallback
-          src="/public/img/AKX_04_Perspectiva Ilustrada da Fachada Jasmin_REV_03_00.jpg"
+          src="/img/AKX_04_Perspectiva Ilustrada da Fachada Jasmin_REV_03_00.jpg"
           alt="Claris Casa & Club"
           className="w-full h-full object-cover"
         />
@@ -165,30 +131,6 @@ export function FinalCTA() {
           <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto">
             Garanta seu contato exclusivo antes que as unidades se esgotem
           </p>
-
-          {/* Units Counter */}
-          <div className="inline-flex items-center gap-4 bg-[#D4AF37] text-black px-6 py-3 rounded-full mb-6">
-            <Clock className="w-5 h-5" />
-            <span className="font-semibold">
-              Apenas {unitsAvailable} unidades disponíveis
-            </span>
-          </div>
-
-          {/* Countdown Timer */}
-          <div className="flex justify-center gap-4 mb-8">
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 text-white min-w-[80px]">
-              <div className="text-2xl font-bold">{timeLeft.hours.toString().padStart(2, '0')}</div>
-              <div className="text-sm opacity-75">Horas</div>
-            </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 text-white min-w-[80px]">
-              <div className="text-2xl font-bold">{timeLeft.minutes.toString().padStart(2, '0')}</div>
-              <div className="text-sm opacity-75">Min</div>
-            </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 text-white min-w-[80px]">
-              <div className="text-2xl font-bold">{timeLeft.seconds.toString().padStart(2, '0')}</div>
-              <div className="text-sm opacity-75">Seg</div>
-            </div>
-          </div>
         </motion.div>
 
         {/* Form Section */}

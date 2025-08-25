@@ -53,7 +53,7 @@ export function ExclusiveServices() {
       const whatsappMessage = encodeURIComponent(
         'Olá! Gostaria de agendar uma consultoria personalizada para conhecer o Claris Casa & Club. Tenho interesse em receber informações exclusivas sobre o empreendimento.'
       );
-      window.open(`https://wa.me/5521999999999?text=${whatsappMessage}`, '_blank');
+      window.open(`https://wa.me/5521971875960?text=${whatsappMessage}`, '_blank');
     }
   };
 

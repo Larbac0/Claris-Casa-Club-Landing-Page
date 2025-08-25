@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -7,7 +7,6 @@ import {
   Play,
   Camera,
 } from "lucide-react";
-import { Button } from "./ui/button";
 import { ImageWithFallback } from "./ui/ImageWithFallback";
 
 interface GalleryImage {
@@ -236,12 +235,10 @@ export function VisualTour() {
   // Navigate in lightbox
   const nextInLightbox = () => {
     if (selectedSection !== null) {
-      const section = gallerySections[selectedSection];
-
       // Se chegou na última imagem da seção, vai para a próxima seção
       if (
         selectedImageInSection ===
-        section.images.length - 1
+        gallerySections[selectedSection].images.length - 1
       ) {
         const nextSectionIndex =
           (selectedSection + 1) % gallerySections.length;
@@ -272,7 +269,6 @@ export function VisualTour() {
 
   const prevInLightbox = () => {
     if (selectedSection !== null) {
-      const section = gallerySections[selectedSection];
 
       // Se está na primeira imagem da seção, vai para a seção anterior
       if (selectedImageInSection === 0) {

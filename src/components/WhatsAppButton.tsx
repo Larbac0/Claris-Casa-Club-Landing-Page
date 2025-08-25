@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X } from 'lucide-react';
 
-const WHATSAPP_NUMBER = '5521999999999'; // Replace with actual number
+const WHATSAPP_NUMBER = '5521971875960';
 const WHATSAPP_MESSAGE = 'Olá! Tenho interesse no Claris Casa & Club. Gostaria de receber mais informações.';
 
 export function WhatsAppButton() {

@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Car, Plane, ShoppingBag, GraduationCap, Building2, ExternalLink, Navigation } from 'lucide-react';
-import { ImageWithFallback } from './ui/ImageWithFallback';
 
 const locationFeatures = [
   {

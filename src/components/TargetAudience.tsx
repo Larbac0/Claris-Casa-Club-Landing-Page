@@ -1,4 +1,3 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import { Users, Briefcase, Heart, Target } from 'lucide-react';
 import { ImageWithFallback } from './ui/ImageWithFallback';
