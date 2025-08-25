@@ -185,7 +185,7 @@ export function FinalCTA() {
               {/* Testimonial */}
               <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
                 <p className="text-white/90 italic mb-4">
-                  "Com mais de 30 anos no mercado, garantimos a qualidade e pontualidade que você merece."
+                  "Três décadas de excelência e experiência com residências de alto padrão traduzidas em cada detalhe do seu novo lar"
                 </p>
                 <div className="text-[#D4AF37] font-semibold">
                   - Construtora Premium
