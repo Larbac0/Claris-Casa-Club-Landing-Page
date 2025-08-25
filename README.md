@@ -10,7 +10,6 @@ Um projeto de landing page premium para o condomínio de luxo Claris Casa & Club
 - **Motion** (Framer Motion) para animações
 - **Radix UI** para componentes acessíveis
 - **Lucide React** para ícones
-- **Supabase** para backend (opcional)
 
 ## 📦 Instalação
 
@@ -60,10 +59,6 @@ src/
 - **Serif**: Playfair Display (títulos)
 - **Sans-serif**: Inter (textos)
 
-## 🚀 Deploy
-
-O projeto está configurado para deploy em plataformas como Vercel, Netlify ou GitHub Pages.
-
 ```bash
 # Build para produção
 npm run build
@@ -85,7 +80,6 @@ npm run build
 ## 🔧 Personalização
 
 ### Cores
-Edite as variáveis CSS em `src/styles/globals.css`:
 
 ```css
 :root {

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Clock, Phone, Mail, User, MessageCircle, CheckCircle, AlertCircle } from 'lucide-react';
+import { Phone, User, MessageCircle, CheckCircle, AlertCircle } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
@@ -28,6 +28,8 @@ export function FinalCTA() {
   setSubmitStatus('idle');
 
   try {
+
+    // 2. Enviar para HubSpot
     const response = await fetch(
       `https://api.hsforms.com/submissions/v3/integration/submit/50401797/ec59b695-8d5a-46a2-a55a-8b97816bcce7`,
       {
