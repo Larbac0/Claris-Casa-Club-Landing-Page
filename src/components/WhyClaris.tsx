@@ -9,13 +9,13 @@ const benefits = [
   },
   {
     icon: Users,
-    title: "Apenas 99 unidades",
+    title: "Apenas 27 unidades disponíveis",
     description: "Condomínio fechado com exclusividade garantida situado em uma das áreas mais nobres da Zona Oeste do Rio."
   },
   {
     icon: Car,
     title: "Garagem Subterrânea Privativa",
-    description: "Com segurança e ótimo espaço para até 3 veículos"
+    description: "Garagem para 3 veículos + bicicletário + pranchário. Sala de repouso com tanque, geladeira e TV Segurança, funcionalidade e conforto — tudo no mesmo espaço"
   },
   {
     icon: TreePine,

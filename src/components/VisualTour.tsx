@@ -28,15 +28,15 @@ const gallerySections: GallerySection[] = [
     description: "Fachada moderna e elegante",
     images: [
       {
-        src: "https://lancamento.invexo.com.br/wp-content/uploads/2025/02/claris-casa-e-clube-barra-da-tijuca-rio-de-janeiro-rj-1-2048x1152.jpg",
+        src: "./img/Vista Externa 1_resultado.webp",
         alt: "Vista Externa Principal",
       },
       {
-        src: "https://lancamento.invexo.com.br/wp-content/uploads/2025/02/claris-casa-e-clube-barra-da-tijuca-rio-de-janeiro-rj-2-2048x1152.jpg",
+        src: "./img/Vista Externa 2_resultado.webp",
         alt: "Vista Externa Lateral",
       },
       {
-        src: "https://lancamento.invexo.com.br/wp-content/uploads/2025/02/claris-casa-e-clube-barra-da-tijuca-rio-de-janeiro-rj-4-2048x1152.jpg",
+        src: "./img/Vista Externa 3_resultado.webp",
         alt: "Vista Externa Noturna",
       },
     ],
@@ -47,11 +47,11 @@ const gallerySections: GallerySection[] = [
     description: "Ambiente amplo e sofisticado",
     images: [
       {
-        src: "https://lancamento.invexo.com.br/wp-content/uploads/2025/02/claris-casa-e-clube-barra-da-tijuca-rio-de-janeiro-rj-5-2048x1152.jpg",
+        src: "./img/Sala de estar 4_resultado.webp",
         alt: "Sala de Estar Principal",
       },
-      {
-        src: "https://lancamento.invexo.com.br/wp-content/uploads/2025/02/claris-casa-e-clube-barra-da-tijuca-rio-de-janeiro-rj-6-2048x1152.jpg",
+            {
+        src: "./img/Sala de estar 5_resultado.webp",
         alt: "Sala de Estar Ângulo 2",
       },
     ],
@@ -62,15 +62,15 @@ const gallerySections: GallerySection[] = [
     description: "Equipada com os melhores acabamentos",
     images: [
       {
-        src: "https://lancamento.invexo.com.br/wp-content/uploads/2025/02/claris-casa-e-clube-barra-da-tijuca-rio-de-janeiro-rj-8-2048x1152.jpg",
+        src: "./img/Cozinha 2_resultado.webp",
         alt: "Cozinha Gourmet Principal",
       },
       {
-        src: "https://lancamento.invexo.com.br/wp-content/uploads/2025/02/claris-casa-e-clube-barra-da-tijuca-rio-de-janeiro-rj-9-2048x1152.jpg",
+        src: "./img/Cozinha 3_resultado.webp",
         alt: "Cozinha Gourmet Detalhes",
       },
       {
-        src: "https://lancamento.invexo.com.br/wp-content/uploads/2025/02/claris-casa-e-clube-barra-da-tijuca-rio-de-janeiro-rj-7-2048x1152.jpg",
+        src: "./img/Cozinha 4_resultado.webp",
         alt: "Cozinha Gourmet Ilha",
       },
     ],
@@ -81,11 +81,11 @@ const gallerySections: GallerySection[] = [
     description: "Área de lazer exclusiva",
     images: [
       {
-        src: "/img/Piscina.jpg",
+        src: "./img/Piscina_resultado.webp",
         alt: "Piscina Principal",
       },
       {
-        src: "/img/Piscina 2.jpg",
+        src: "./img/Piscina 2_resultado.webp",
         alt: "Piscina Vista Aérea",
       },
     ],
@@ -96,15 +96,15 @@ const gallerySections: GallerySection[] = [
     description: "Suíte principal com vista para o mar",
     images: [
       {
-        src: "https://lancamento.invexo.com.br/wp-content/uploads/2025/02/claris-casa-e-clube-barra-da-tijuca-rio-de-janeiro-rj-27-2048x1152.jpg",
+        src: "./img/Suiter master 4_resultado.webp",
         alt: "Quarto Master Principal",
       },
       {
-        src: "https://lancamento.invexo.com.br/wp-content/uploads/2025/02/claris-casa-e-clube-barra-da-tijuca-rio-de-janeiro-rj-28-2048x1152.jpg",
+        src: "./img/Suiter master 5_resultado.webp",
         alt: "Quarto Master Closet",
       },
       {
-        src: "https://lancamento.invexo.com.br/wp-content/uploads/2025/02/claris-casa-e-clube-barra-da-tijuca-rio-de-janeiro-rj-29-2048x1152.jpg",
+        src: "./img/Suiter master 6_resultado.webp",
         alt: "Quarto Master Closet",
       },
     ],
@@ -115,11 +115,11 @@ const gallerySections: GallerySection[] = [
     description: "Espaço gourmet com vista panorâmica",
     images: [
       {
-        src: "https://lancamento.invexo.com.br/wp-content/uploads/2025/02/claris-casa-e-clube-barra-da-tijuca-rio-de-janeiro-rj-30-2048x1152.jpg",
+        src: "./img/Varanda 4_resultado.webp",
         alt: "Varanda Gourmet Principal",
       },
       {
-        src: "https://lancamento.invexo.com.br/wp-content/uploads/2025/02/claris-casa-e-clube-barra-da-tijuca-rio-de-janeiro-rj-31-2048x1152.jpg",
+        src: "./img/Varanda 5_resultado.webp",
         alt: "Varanda Vista Mar",
       },
     ],
@@ -130,15 +130,15 @@ const gallerySections: GallerySection[] = [
     description: "Garagem subterrânea privativa",
     images: [
       {
-        src: "https://lancamento.invexo.com.br/wp-content/uploads/2025/02/claris-casa-e-clube-barra-da-tijuca-rio-de-janeiro-rj-18-2048x1152.jpg",
+        src: "./img/Garegem 3_resultado.webp",
         alt: "Garagem Subterrânea Entrada",
       },
       {
-        src: "https://lancamento.invexo.com.br/wp-content/uploads/2025/02/claris-casa-e-clube-barra-da-tijuca-rio-de-janeiro-rj-17-2048x1152.jpg",
+        src: "./img/Garegem 4_resultado.webp",
         alt: "Garagem Subterrânea Vagas",
       },
       {
-        src: "https://lancamento.invexo.com.br/wp-content/uploads/2025/02/claris-casa-e-clube-barra-da-tijuca-rio-de-janeiro-rj-16-2048x1152.jpg",
+        src: "./img/Garegem 5_resultado.webp",
         alt: "Garagem Subterrânea Segurança",
       },
     ],
@@ -463,7 +463,7 @@ export function VisualTour() {
             <div className="relative overflow-hidden rounded-2xl h-80 md:h-96">
               {/* Before Image */}
               <ImageWithFallback
-                src="/img/Entrada.jpeg"
+                src="./img/Entrada_resultado.webp"
                 alt="Antes - Terreno"
                 className="absolute inset-0 w-full h-full object-cover"
                 style={{
@@ -473,7 +473,7 @@ export function VisualTour() {
 
               {/* After Image */}
               <ImageWithFallback
-                src="/img/Entrada.jpg"
+                src="./img/Entrada_resultado_1.webp"
                 alt="Depois - Claris Casa & Club"
                 className="absolute inset-0 w-full h-full object-cover"
                 style={{

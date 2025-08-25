@@ -9,7 +9,7 @@ const services = [
     icon: FileText,
     title: 'Plantas Privativas',
     description: 'Acesse o memorial completo com todas as plantas e layouts exclusivos.',
-    image: '/img/plantas/Planta condomínio.jpg'
+    image: '/public/img/plantas/Planta condomínio_resultado.webp'
   },
   {
     icon: Play,

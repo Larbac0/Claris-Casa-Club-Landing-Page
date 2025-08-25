@@ -109,7 +109,7 @@ export function ExcellenceSection() {
           >
             <div className="relative z-10">
               <ImageWithFallback
-                src="./img/Área externa.jpg"
+                src="./img/Área externa_resultado.webp"
                 alt="Construção de Qualidade"
                 className="w-full h-96 object-cover rounded-3xl shadow-2xl"
               />

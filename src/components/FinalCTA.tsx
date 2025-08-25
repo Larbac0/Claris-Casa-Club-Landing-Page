@@ -111,7 +111,7 @@ export function FinalCTA() {
       {/* Background with overlay */}
       <div className="absolute inset-0">
         <ImageWithFallback
-          src="/img/AKX_04_Perspectiva Ilustrada da Fachada Jasmin_REV_03_00.jpg"
+          src="./img/AKX_04_Perspectiva Ilustrada da Fachada Jasmin_REV_03_00_resultado.webp"
           alt="Claris Casa & Club"
           className="w-full h-full object-cover"
         />
@@ -318,7 +318,10 @@ export function FinalCTA() {
         >
           <div className="inline-block bg-white/10 backdrop-blur-sm px-8 py-4 rounded-full border border-white/20">
             <p className="text-white">
-              <span className="text-[#D4AF37] font-semibold">Atenção:</span> Promoção válida apenas para os primeiros interessados
+              <span className="text-[#D4AF37] font-semibold">OPORTUNIDADES EXCLUSIVAS E PERSONALIZADAS!</span> De forma seletiva, disponibilizamos unidades com condições diferenciadas. Além disso, promovemos encontros privativos, harmonizados com queijos e vinhos, para apresentar o Claris Casa & Club em um ambiente de requinte e exclusividade.
+            </p>
+            <p className="text-white">
+              Fale conosco pelo WhatsApp e descubra se há uma unidade disponível ou conheça nossos eventos de relacionamento.
             </p>
           </div>
         </motion.div>

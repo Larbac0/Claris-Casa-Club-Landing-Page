@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X } from 'lucide-react';
 
 const WHATSAPP_NUMBER = '5521971875960';
-const WHATSAPP_MESSAGE = 'Olá! Tenho interesse no Claris Casa & Club. Gostaria de receber mais informações.';
+const WHATSAPP_MESSAGE = 'Olá! Gostaria de agendar uma consultoria privada para conhecer o Claris Casa & Club. Tenho interesse em explorar as oportunidades disponíveis e entender como este projeto pode se alinhar ao meu estilo de vida.';
 
 export function WhatsAppButton() {
   const [isVisible, setIsVisible] = useState(false);
