@@ -30,22 +30,29 @@ export function AdminDashboard() {
 
   const fetchLeads = async () => {
     setLoading(true);
+    setError('');
+    const functionUrl = import.meta.env.VITE_SUPABASE_LEADS_FUNCTION_URL as string | undefined;
+    const authToken = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined; // using anon key for edge function auth header if required
+    if (!functionUrl || !authToken) {
+      setError('Variáveis de ambiente VITE_SUPABASE_LEADS_FUNCTION_URL ou VITE_SUPABASE_ANON_KEY ausentes');
+      setLoading(false);
+      return;
+    }
     try {
-      const response = await fetch(`https://xvnjaxbrlvvdufbcaysd.supabase.co/functions/v1/make-server-17b725d2/leads`, {
+      const response = await fetch(functionUrl, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh2bmpheGJybHZ2ZHVmYmNheXNkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4NjkxMDAsImV4cCI6MjA3MTQ0NTEwMH0.lYH5EVW66A4FwFnCKTvchmiSpZTvbvvDwxu1rC3rZfA`,
+          Authorization: `Bearer ${authToken}`,
         },
       });
-
       const result = await response.json();
-      
       if (response.ok) {
         setLeads(result.leads || []);
       } else {
         setError(result.error || 'Erro ao carregar leads');
       }
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error('Error fetching leads:', err);
       setError('Erro de conexão');
     } finally {

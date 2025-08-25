@@ -5,6 +5,7 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { Checkbox } from './ui/checkbox';
+import { supabase } from '../lib/supabaseClient';
 import { ImageWithFallback } from './ui/ImageWithFallback';
 
 export function FinalCTA() {
@@ -55,7 +56,7 @@ export function FinalCTA() {
 
 
 
-    if (response.ok) {
+  if (response.ok) {
       setSubmitStatus("success");
       setSubmitMessage("Obrigado! Seus dados foram enviados com sucesso. Em breve entraremos em contato.");
 
@@ -67,6 +68,27 @@ export function FinalCTA() {
         message: "",
         whatsappConsent: false,
       });
+
+      // Registrar no Supabase (melhor esforço - não bloqueia o usuário)
+      try {
+        const { error: supaError } = await supabase.from('leads').insert({
+          name: formData.name,
+          email: formData.email,
+            phone: formData.phone,
+          message: formData.message || null,
+          whatsapp_consent: formData.whatsappConsent,
+          source: 'final_cta',
+          page_url: typeof window !== 'undefined' ? window.location.href : null,
+          page_title: typeof document !== 'undefined' ? document.title : null,
+        });
+        if (supaError) {
+          // eslint-disable-next-line no-console
+          console.warn('[Supabase] Falha ao registrar lead:', supaError.message);
+        }
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.warn('[Supabase] Erro inesperado ao inserir lead', e);
+      }
 
       // Pixel & Analytics (igual você já tinha)
       if (typeof window !== "undefined" && (window as any).gtag) {
@@ -85,7 +107,7 @@ export function FinalCTA() {
         });
       }
 
-    } else {
+  } else {
       setSubmitStatus("error");
       setSubmitMessage("Erro ao enviar formulário. Tente novamente.");
       console.error(await response.json());
