@@ -9,7 +9,7 @@ import { TargetAudience } from "./components/TargetAudience";
 import { FinalCTA } from "./components/FinalCTA";
 import { WhatsAppButton } from "./components/WhatsAppButton";
 import { AdminDashboard } from "./components/AdminDashboard";
-import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from '@vercel/analytics/react';
 
 
 export default function App() {
