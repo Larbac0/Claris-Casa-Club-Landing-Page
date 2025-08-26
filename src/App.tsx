@@ -9,6 +9,8 @@ import { TargetAudience } from "./components/TargetAudience";
 import { FinalCTA } from "./components/FinalCTA";
 import { WhatsAppButton } from "./components/WhatsAppButton";
 import { AdminDashboard } from "./components/AdminDashboard";
+import { Analytics } from "@vercel/analytics/next"
+
 
 export default function App() {
   const [showAdmin, setShowAdmin] = useState(false);
@@ -40,6 +42,7 @@ export default function App() {
       <TargetAudience />
       <FinalCTA />
       <WhatsAppButton />
+      <Analytics />
 
       {/* Hidden admin access link */}
       <div className="fixed bottom-0 left-0 opacity-0 hover:opacity-100 transition-opacity duration-300">
