@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { HeroSection } from "./components/HeroSection";
+import { ClarisExclusives } from "./components/ClarisExclusives";
+import { InstitutionalVideo } from "./components/InstitutionalVideo";
 import { WhyClaris } from "./components/WhyClaris";
 import { VisualTour } from "./components/VisualTour";
 import { ExclusiveServices } from "./components/ExclusiveServices";
@@ -7,7 +9,9 @@ import { ExcellenceSection } from "./components/ExcellenceSection";
 import { StrategicLocation } from "./components/StrategicLocation";
 import { TargetAudience } from "./components/TargetAudience";
 import { FinalCTA } from "./components/FinalCTA";
+import { PartnerDisclaimer } from "./components/PartnerDisclaimer";
 import { WhatsAppButton } from "./components/WhatsAppButton";
+import { ChatWidget } from "./components/ChatWidget";
 import { AdminDashboard } from "./components/AdminDashboard";
 import { Analytics } from '@vercel/analytics/react';
 
@@ -34,6 +38,8 @@ export default function App() {
   return (
     <div className="min-h-screen bg-white">
       <HeroSection />
+      <ClarisExclusives />
+      <InstitutionalVideo />
       <WhyClaris />
       <VisualTour />
       <ExclusiveServices />
@@ -41,8 +47,9 @@ export default function App() {
       <StrategicLocation />
       <TargetAudience />
       <FinalCTA />
+      <PartnerDisclaimer />
       <WhatsAppButton />
-      <Analytics />
+      <ChatWidget />
 
       {/* Hidden admin access link */}
       <div className="fixed bottom-0 left-0 opacity-0 hover:opacity-100 transition-opacity duration-300">
