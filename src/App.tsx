@@ -50,6 +50,7 @@ export default function App() {
       <PartnerDisclaimer />
       <WhatsAppButton />
       <ChatWidget />
+      <Analytics />
 
       {/* Hidden admin access link */}
       <div className="fixed bottom-0 left-0 opacity-0 hover:opacity-100 transition-opacity duration-300">
