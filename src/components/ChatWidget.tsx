@@ -23,7 +23,7 @@ export function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [currentInput, setCurrentInput] = useState('');
-  const [chatStep, setChatStep] = useState<'welcome' | 'name' | 'email' | 'phone' | 'interest' | 'complete'>('welcome');
+  const [chatStep, setChatStep] = useState<'welcome' | 'name' | 'email' | 'phone' | 'complete'>('welcome');
   const [chatData, setChatData] = useState<ChatData>({
     name: '',
     email: '',
@@ -59,10 +59,10 @@ export function ChatWidget() {
   useEffect(() => {
     if (isOpen && messages.length === 0) {
       setTimeout(() => {
-        addBotMessage("Olá! 👋 Bem-vindo ao Claris Casa & Club! Sou o assistente virtual e estou aqui para ajudar você a conhecer este empreendimento exclusivo na Barra da Tijuca.");
+        addBotMessage("Olá 👋 Seja muito bem-vindo ao universo Claris — onde sofisticação, privacidade e natureza se encontram em perfeita harmonia. Sou seu corretor pessoal e estou aqui para guiá-lo por cada detalhe deste empreendimento único do Parque das Rosas - Barra da Tijuca.");
         
         setTimeout(() => {
-          addBotMessage("Para oferecer o melhor atendimento personalizado, vou precisar de algumas informações básicas. Vamos começar?");
+          addBotMessage("Posso começar te chamando pelo nome? Isso me ajuda a oferecer um atendimento mais próximo e exclusivo.");
           setChatStep('name');
         }, 2000);
       }, 1000);
@@ -132,11 +132,7 @@ export function ChatWidget() {
       case 'phone':
         setChatData(prev => ({ ...prev, phone: userInput }));
         addBotMessage("Ótimo! 📱", 1000);
-        addBotMessage("Para finalizar, me conte: qual é o seu interesse no Claris Casa & Club? (Ex: investimento, moradia, informações gerais)", 2500);
-        setChatStep('interest');
-        break;
 
-      case 'interest':
         setChatData(prev => ({ ...prev, interest: userInput }));
         addBotMessage("Excelente! Obrigado pelas informações. 🎉", 1000);
         addBotMessage("Estou conectando você com nosso consultor especializado via WhatsApp. Em instantes você receberá uma mensagem personalizada!", 3000);
@@ -154,59 +150,69 @@ export function ChatWidget() {
     return emailRegex.test(email);
   };
 
-  const submitChatData = async (data: ChatData) => {
-    setIsSubmitting(true);
-    
-    try {
-      // Submit to Supabase backend
-      const baseUrl = `https://pezerzeepjrmzsfpoegi.supabase.co/functions/v1/make-server-17b725d2`;
-      const response = await fetch(`${baseUrl}/chat-submit`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBlemVyemVlcGpybXpzZnBvZWdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2OTY0MjIsImV4cCI6MjA3MDI3MjQyMn0.LY4ju-QBzeOOxG_KZnSm24ut9t_PcuyOoVumQptCBdo`,
-        },
-        body: JSON.stringify(data),
-      });
+  // ...existing code...
 
-      const result = await response.json();
+const submitChatData = async (data: ChatData) => {
+  setIsSubmitting(true);
 
-      if (response.ok) {
-        setSubmitStatus('success');
-        addBotMessage(`${data.name}, suas informações foram enviadas com sucesso! 🎯`, 2000);
-        addBotMessage("Nosso consultor entrará em contato pelo WhatsApp em alguns minutos. Enquanto isso, continue explorando nossa landing page!", 4000);
-        
-        // Optional: Close chat after successful submission
-        setTimeout(() => {
-          setIsMinimized(true);
-        }, 8000);
-      } else {
-        throw new Error(result.error || 'Erro no envio');
-      }
-    } catch (error) {
-      console.error('Error submitting chat data:', error);
-      setSubmitStatus('error');
-      
-      // Fallback to direct WhatsApp
-      const whatsappNumber = "5521999887766"; // Replace with actual number
-      const message = `Olá! Sou ${data.name}. Email: ${data.email}. Telefone: ${data.phone}. Interesse: ${data.interest}. Gostaria de saber mais sobre o Claris Casa & Club.`;
-      const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-      
-      addBotMessage("Houve um problema técnico, mas não se preocupe! 😊", 1500);
-      addBotMessage("Vou abrir o WhatsApp diretamente para você continuar a conversa com nosso consultor.", 3000);
-      
-      setTimeout(() => {
-        try {
-          window.open(whatsappUrl, '_blank');
-        } catch (openError) {
-          console.error('Error opening WhatsApp:', openError);
-          addBotMessage(`Você pode nos contatar diretamente pelo WhatsApp: ${whatsappNumber}`, 1000);
-        }
-      }, 5000);
-    } finally {
-      setIsSubmitting(false);
+  try {
+    // 1. Enviar para HubSpot
+    const hubspotUrl = `https://api.hsforms.com/submissions/v3/integration/submit/50401797/ec59b695-8d5a-46a2-a55a-8b97816bcce7`;
+
+    const hubspotPayload = {
+      fields: [
+        { name: 'firstname', value: data.name },
+        { name: 'email', value: data.email },
+        { name: 'phone', value: data.phone },
+        { name: 'message', value: data.interest },
+      ],
+      context: {
+        pageUri: window.location.href,
+        pageName: document.title,
+      },
+    };
+
+    const hubspotResponse = await fetch(hubspotUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(hubspotPayload),
+    });
+
+    if (!hubspotResponse.ok) {
+      throw new Error('Erro ao enviar para HubSpot');
     }
-  };
+
+    // 2. Enviar para Supabase
+    const baseUrl = `https://pezerzeepjrmzsfpoegi.supabase.co/functions/v1/make-server-17b725d2`;
+    const response = await fetch(`${baseUrl}/chat-submit`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBlemVyemVlcGpybXpzZnBvZWdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2OTY0MjIsImV4cCI6MjA3MDI3MjQyMn0.LY4ju-QBzeOOxG_KZnSm24ut9t_PcuyOoVumQptCBdo`,
+      },
+      body: JSON.stringify(data),
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      setSubmitStatus('success');
+      addBotMessage(`${data.name}, suas informações foram enviadas com sucesso! 🎯`, 2000);
+      addBotMessage("Nosso consultor entrará em contato pelo WhatsApp em alguns minutos. Enquanto isso, continue explorando nossa landing page!", 4000);
+      setTimeout(() => { setIsMinimized(true); }, 8000);
+    } else {
+      throw new Error(result.error || 'Erro no envio');
+    }
+  } catch (error) {
+    console.error('Error submitting chat data:', error);
+    setSubmitStatus('error');
+    // ...fallback para WhatsApp...
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
+// ...existing code...
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -231,7 +237,6 @@ export function ChatWidget() {
       case 'name': return 'Digite seu nome...';
       case 'email': return 'Digite seu e-mail...';
       case 'phone': return 'Digite seu WhatsApp...';
-      case 'interest': return 'Conte-me sobre seu interesse...';
       default: return 'Digite sua mensagem...';
     }
   };
@@ -282,7 +287,7 @@ export function ChatWidget() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 100, scale: 0.8 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="fixed bottom-24 right-6 w-80 md:w-96 h-[500px] bg-white rounded-2xl shadow-2xl z-40 flex flex-col overflow-hidden border border-gray-200"
+            className="fixed bottom-6 right-26 w-80 md:w-96 h-[500px] bg-white rounded-2xl shadow-2xl z-40 flex flex-col overflow-hidden border border-gray-200"
           >
             {/* Header */}
             <div className="bg-gradient-to-r from-[#D4AF37] to-[#B8941F] text-black p-4 flex items-center justify-between">
@@ -292,7 +297,7 @@ export function ChatWidget() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-sm">Claris Casa & Club</h3>
-                  <p className="text-xs opacity-90">Assistente Virtual</p>
+                  <p className="text-xs opacity-90">Corretor Virtual Exclusivo</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">

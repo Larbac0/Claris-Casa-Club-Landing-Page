@@ -59,7 +59,7 @@ export function WhatsAppButton() {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div className="fixed bottom-26 right-6 z-50">
       <AnimatePresence>
         {showTooltip && (
           <motion.div
@@ -88,7 +88,7 @@ export function WhatsAppButton() {
                   className="bg-[#25D366] hover:bg-[#1FAD54] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center gap-2"
                 >
                   <MessageCircle className="w-4 h-4" />
-                  Iniciar conversa
+                  Fale com o corretor Tegra
                 </button>
               </div>
               

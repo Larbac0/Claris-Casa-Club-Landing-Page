@@ -210,7 +210,7 @@ export function FinalCTA() {
                   "Três décadas de excelência e experiência com residências de alto padrão traduzidas em cada detalhe do seu novo lar"
                 </p>
                 <div className="text-[#D4AF37] font-semibold">
-                  - Construtora Premium
+                  - Tegra Incorporadora
                 </div>
               </div>
             </motion.div>
