@@ -15,14 +15,14 @@ const services = [
     icon: Play,
     title: 'Tour Imersivo',
     description: 'Vídeo institucional com experiência virtual envolvente.',
-    image: 'https://images.unsplash.com/photo-1600566753151-384129cf4e3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
+    image: './img/Varanda 2_resultado.webp',
     hasModal: true
   },
   {
     icon: UserCheck,
     title: 'Consultoria Personalizada',
     description: 'Um especialista dedicado aos seus objetivos e preferências.',
-    image: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80'
+    image: './img/Consultoria personalizada 2.jpeg'
   }
 ];
 
@@ -51,7 +51,8 @@ export function ExclusiveServices() {
     } else if (index === 2) {
       // Consultoria Personalizada - Open WhatsApp
       const whatsappMessage = encodeURIComponent(
-        'Olá! Gostaria de agendar uma consultoria personalizada para conhecer o Claris Casa & Club. Tenho interesse em receber informações exclusivas sobre o empreendimento.'
+        'Olá! Gostaria de agendar uma consultoria privada para conhecer o Claris Casa & Club. Tenho interesse em explorar as oportunidades disponíveis e entender como este projeto pode se alinhar ao meu estilo de vida.'
+
       );
       window.open(`https://wa.me/5521971875960?text=${whatsappMessage}`, '_blank');
     }

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Users, Briefcase, Heart, Target } from 'lucide-react';
+import { Briefcase, Heart, Target } from 'lucide-react';
 import { ImageWithFallback } from './ui/ImageWithFallback';
 
 const personas = [
@@ -24,7 +24,7 @@ const personas = [
     title: 'Famílias Modernas',
     subtitle: 'Casais com Filhos',
     description: 'Famílias que priorizam segurança, qualidade de vida, proximidade a escolas e áreas de lazer para as crianças.',
-    image: 'https://images.unsplash.com/photo-1511895426328-dc8714efa6d2?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
+    image: '/public/img/Familia.jpg',
     characteristics: [
       'Idade: 28-45 anos',
       'Renda familiar: R$ 15.000+',
@@ -147,49 +147,6 @@ export function TargetAudience() {
             </motion.div>
           ))}
         </div>
-
-        {/* Benefits Summary */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          viewport={{ once: true }}
-          className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-3xl p-8 lg:p-12"
-        >
-          <div className="text-center mb-8">
-            <h3 className="text-2xl md:text-3xl font-serif text-gray-800 mb-4">
-              Independente do seu perfil, o <span className="text-[#D4AF37]">Claris</span> é para você
-            </h3>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Cada detalhe foi pensado para proporcionar a melhor experiência de moradia na Barra da Tijuca
-            </p>
-          </div>
-
-          {/* Universal Benefits */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { icon: Users, title: 'Comunidade Exclusiva', desc: '99 famílias selecionadas' },
-              { icon: Target, title: 'Valorização Garantida', desc: 'Localização premium' },
-              { icon: Heart, title: 'Qualidade de Vida', desc: 'Lazer completo' },
-              { icon: Briefcase, title: 'Status e Prestígio', desc: 'Endereço de referência' }
-            ].map((benefit, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.8 + index * 0.1 }}
-                viewport={{ once: true }}
-                className="text-center group"
-              >
-                <div className="w-16 h-16 bg-white rounded-2xl shadow-lg flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                  <benefit.icon className="w-8 h-8 text-[#D4AF37]" />
-                </div>
-                <h4 className="font-semibold text-gray-800 mb-2">{benefit.title}</h4>
-                <p className="text-sm text-gray-600">{benefit.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
       </div>
     </section>
   );

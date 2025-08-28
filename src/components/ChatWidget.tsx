@@ -150,22 +150,22 @@ export function ChatWidget() {
     return emailRegex.test(email);
   };
 
-  // ...existing code...
-
 const submitChatData = async (data: ChatData) => {
   setIsSubmitting(true);
 
+  // Use variáveis de ambiente
+  const consultorWhatsapp = import.meta.env.VITE_WHATSAPP_CONSULTOR_NUMBER || '5521964937406';
+
   try {
-    // 1. Enviar para HubSpot
-    const hubspotUrl = `https://api.hsforms.com/submissions/v3/integration/submit/50401797/ec59b695-8d5a-46a2-a55a-8b97816bcce7`;
+    // 1. Enviar para HubSpot (igual ao formulário)
+    const hubspotUrl = `https://api.hsforms.com/submissions/v3/integration/submit/50401797/272b5f25-61df-4011-af5c-bb0229921397`;
 
     const hubspotPayload = {
-      fields: [
-        { name: 'firstname', value: data.name },
-        { name: 'email', value: data.email },
-        { name: 'phone', value: data.phone },
-        { name: 'message', value: data.interest },
-      ],
+          fields: [
+            { name: "firstname", value: data.name },
+            { name: "email", value: data.email },
+            { name: "phone", value: data.phone },
+          ],
       context: {
         pageUri: window.location.href,
         pageName: document.title,
@@ -179,40 +179,27 @@ const submitChatData = async (data: ChatData) => {
     });
 
     if (!hubspotResponse.ok) {
+      // Fallback: WhatsApp direto para corretor
+      const whatsappMsg = encodeURIComponent(
+        `Novo lead via chat (fallback):\nNome: ${data.name}\nEmail: ${data.email}\nTelefone: ${data.phone}\nInteresse: ${data.interest}`
+      );
+      window.open(`https://wa.me/${consultorWhatsapp}?text=${whatsappMsg}`, '_blank');
       throw new Error('Erro ao enviar para HubSpot');
     }
 
-    // 2. Enviar para Supabase
-    const baseUrl = `https://pezerzeepjrmzsfpoegi.supabase.co/functions/v1/make-server-17b725d2`;
-    const response = await fetch(`${baseUrl}/chat-submit`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBlemVyemVlcGpybXpzZnBvZWdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2OTY0MjIsImV4cCI6MjA3MDI3MjQyMn0.LY4ju-QBzeOOxG_KZnSm24ut9t_PcuyOoVumQptCBdo`,
-      },
-      body: JSON.stringify(data),
-    });
 
-    const result = await response.json();
+    setSubmitStatus('success');
+    // Mensagens automáticas já presentes no chat
+    setTimeout(() => { setIsMinimized(true); }, 8000);
 
-    if (response.ok) {
-      setSubmitStatus('success');
-      addBotMessage(`${data.name}, suas informações foram enviadas com sucesso! 🎯`, 2000);
-      addBotMessage("Nosso consultor entrará em contato pelo WhatsApp em alguns minutos. Enquanto isso, continue explorando nossa landing page!", 4000);
-      setTimeout(() => { setIsMinimized(true); }, 8000);
-    } else {
-      throw new Error(result.error || 'Erro no envio');
-    }
   } catch (error) {
     console.error('Error submitting chat data:', error);
     setSubmitStatus('error');
-    // ...fallback para WhatsApp...
+    // Mensagens automáticas já presentes no chat
   } finally {
     setIsSubmitting(false);
   }
 };
-
-// ...existing code...
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {

@@ -2,22 +2,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 import { Button } from './ui/button';
 
-interface YouTubeVideoModalProps {
+interface LocalVideoModalProps {
   isOpen: boolean;
   onClose: () => void;
-  videoId?: string; // YouTube video ID
+  videoSrc?: string;
 }
 
-export function YouTubeVideoModal({ isOpen, onClose, videoId = "dQw4w9WgXcQ" }: YouTubeVideoModalProps) {
-  // ====================================
-  // CONFIGURAÇÃO DO VÍDEO YOUTUBE
-  // ====================================
-  // Para usar: substitua "dQw4w9WgXcQ" pelo ID do seu vídeo do YouTube
-  // Exemplo: https://www.youtube.com/watch?v=ABC123 -> videoId = "ABC123"
-  const youtubeVideoId = videoId;
-  
-  // URL do embed do YouTube com parâmetros otimizados
-  const youtubeUrl = `https://www.youtube.com/embed/${youtubeVideoId}?autoplay=1&rel=0&modestbranding=1&showinfo=0&fs=1&cc_load_policy=0&iv_load_policy=3&autohide=1`;
+export function YouTubeVideoModal({ isOpen, onClose, videoSrc = "./assets/videos/Vídeo-sem-título-‐-Feito-com-o-Clipchamp-_1_.webm" }: LocalVideoModalProps) {
 
   return (
     <AnimatePresence>
@@ -56,13 +47,13 @@ export function YouTubeVideoModal({ isOpen, onClose, videoId = "dQw4w9WgXcQ" }: 
               </div>
             </div>
 
-            {/* YouTube Iframe */}
-            <iframe
-              src={youtubeUrl}
+            {/* Local Video */}
+            <video
+              src={videoSrc}
               className="w-full h-full"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
+              controls
+              autoPlay
+              playsInline
               title="Vídeo Institucional Claris Casa & Club"
             />
 

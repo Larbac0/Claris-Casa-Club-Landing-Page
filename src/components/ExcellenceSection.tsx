@@ -7,19 +7,19 @@ const excellenceFeatures = [
     icon: Award,
     title: '30 Anos de Mercado',
     description: 'Experiência consolidada em empreendimentos de alto padrão',
-    color: 'from-blue-500 to-blue-600'
+    color: 'from-[#D4AF37] to-[#B8941F]'
   },
   {
     icon: Shield,
     title: 'Garantia Total',
     description: 'Cobertura completa com assistência técnica especializada',
-    color: 'from-green-500 to-green-600'
+    color: 'from-[#D4AF37] to-[#B8941F]'
   },
   {
     icon: Clock,
     title: 'Pontualidade',
     description: 'Entregas rigorosamente dentro do prazo estabelecido',
-    color: 'from-purple-500 to-purple-600'
+    color: 'from-[#D4AF37] to-[#B8941F]'
   },
   {
     icon: Star,

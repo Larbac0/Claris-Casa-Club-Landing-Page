@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Play, Award, Users, MapPin, Calendar } from 'lucide-react';
 import { Button } from './ui/button';
-import { VideoModal } from './VideoModal';
+import { YouTubeVideoModal } from './VideoInstitutional';
 import { ImageWithFallback } from './ui/ImageWithFallback';
 
 export function InstitutionalVideo() {
@@ -69,7 +69,7 @@ export function InstitutionalVideo() {
             {/* Video Thumbnail */}
             <div className="relative rounded-3xl overflow-hidden shadow-2xl">
               <ImageWithFallback
-                src="https://images.unsplash.com/photo-1600566752355-35792bedcfea?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+                src="/public/img/Consultoria personalizada.jpeg"
                 alt="Claris Casa & Club - Vídeo Institucional"
                 className="w-full h-80 md:h-96 object-cover"
               />
@@ -93,14 +93,9 @@ export function InstitutionalVideo() {
                 </Button>
               </motion.div>
 
-              {/* Video Badge */}
-              <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full">
-                <span className="text-sm font-medium text-gray-800">Tour Virtual Exclusivo</span>
-              </div>
-
               {/* Duration Badge */}
               <div className="absolute bottom-4 right-4 bg-black/80 text-white px-3 py-1 rounded-full">
-                <span className="text-sm">3:24</span>
+                <span className="text-sm">0:47</span>
               </div>
             </div>
 
@@ -202,14 +197,13 @@ export function InstitutionalVideo() {
               mas um estilo de vida exclusivo e sofisticado."
             </blockquote>
             <div className="text-[#D4AF37] font-semibold text-lg">
-              — Construtora Premium, 30 anos de tradição
+              — Tegra Incorporadora, 3 décadas de tradição
             </div>
           </div>
         </motion.div>
       </div>
-
       {/* Video Modal */}
-      <VideoModal isOpen={showVideo} onClose={() => setShowVideo(false)} />
+      <YouTubeVideoModal isOpen={showVideo} onClose={() => setShowVideo(false)} />
     </section>
   );
-}
+};

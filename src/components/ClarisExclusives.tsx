@@ -6,7 +6,7 @@ export function ClarisExclusives() {
     {
       category: "Segurança e Tecnologia de Última Geração",
       icon: Shield,
-      color: "from-blue-500 to-blue-600",
+      color: "from-[#D4AF37] to-[#B8941F]",
       features: [
         {
           icon: Shield,
@@ -33,7 +33,7 @@ export function ClarisExclusives() {
     {
       category: "Comodidades Exclusivas",
       icon: Sparkles,
-      color: "from-purple-500 to-purple-600",
+      color: "from-[#D4AF37] to-[#B8941F]",
       features: [
         {
           icon: Truck,
@@ -60,7 +60,7 @@ export function ClarisExclusives() {
     {
       category: "Mobilidade Privilegiada – AMA Rosas",
       icon: Car,
-      color: "from-green-500 to-green-600",
+      color: "from-[#D4AF37] to-[#B8941F]",
       features: [
         {
           icon: Car,
@@ -178,26 +178,6 @@ export function ClarisExclusives() {
                 Combinamos tecnologia de ponta, comodidades excepcionais e localização privilegiada para criar 
                 o ambiente perfeito para quem busca o melhor da vida na Barra da Tijuca.
               </p>
-              
-              {/* Stats */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-[#D4AF37] mb-2">30+</div>
-                  <div className="text-sm text-gray-600">Anos de Experiência</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-[#D4AF37] mb-2">100%</div>
-                  <div className="text-sm text-gray-600">Segurança Garantida</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-[#D4AF37] mb-2">24h</div>
-                  <div className="text-sm text-gray-600">Suporte Completo</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-[#D4AF37] mb-2">∞</div>
-                  <div className="text-sm text-gray-600">Exclusividade</div>
-                </div>
-              </div>
             </div>
           </div>
         </motion.div>
