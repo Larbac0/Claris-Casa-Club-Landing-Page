@@ -69,7 +69,7 @@ export function InstitutionalVideo() {
             {/* Video Thumbnail */}
             <div className="relative rounded-3xl overflow-hidden shadow-2xl">
               <ImageWithFallback
-                src="/public/img/Consultoria personalizada.jpeg"
+                src="/img/Consultoria personalizada.jpeg"
                 alt="Claris Casa & Club - Vídeo Institucional"
                 className="w-full h-80 md:h-96 object-cover"
               />
