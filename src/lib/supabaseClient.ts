@@ -1,16 +1,6 @@
-// Lightweight Supabase client initialization.
-// Requires VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your environment.
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined
+const supabaseUrl = 'https://xvnjaxbrlvvdufbcaysd.supabase.co';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh2bmpheGJybHZ2ZHVmYmNheXNkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4NjkxMDAsImV4cCI6MjA3MTQ0NTEwMH0.lYH5EVW66A4FwFnCKTvchmiSpZTvbvvDwxu1rC3rZfA';
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  // eslint-disable-next-line no-console
-  console.warn('[supabase] Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY environment variables.')
-}
-
-export const supabase = createClient(
-  supabaseUrl || 'http://localhost:54321',
-  supabaseAnonKey || 'public-anon-key'
-)
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
