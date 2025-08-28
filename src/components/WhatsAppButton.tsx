@@ -68,7 +68,7 @@ export function WhatsAppButton() {
             exit={{ opacity: 0, x: 20 }}
             className="absolute bottom-16 right-0 mb-2"
           >
-            <div className="bg-white rounded-2xl shadow-2xl p-4 max-w-xs border border-gray-100 relative">
+              <div className="bg-white rounded-2xl shadow-2xl p-4 max-w-md border border-gray-100 relative w-96">
               <button
                 onClick={() => setShowTooltip(false)}
                 className="absolute top-2 right-2 w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
@@ -78,10 +78,10 @@ export function WhatsAppButton() {
               
               <div className="pr-6">
                 <h4 className="font-semibold text-gray-800 mb-2">
-                  💬 Fale conosco!
+                  Fale com nosso atendimento exclusivo
                 </h4>
                 <p className="text-sm text-gray-600 mb-3">
-                  Tire suas dúvidas sobre o Claris Casa & Club diretamente pelo WhatsApp
+                  Tire suas dúvidas e agende sua visita ao Claris Casa & Club — com discrição, agilidade e sofisticação.
                 </p>
                 <button
                   onClick={handleWhatsAppClick}
