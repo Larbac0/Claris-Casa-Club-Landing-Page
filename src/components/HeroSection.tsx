@@ -25,7 +25,7 @@ export function HeroSection() {
       <div className="absolute inset-0">
         <ImageWithFallback
           src={heroImage}
-          alt="Claris Casa & Club - Luxury Condominium"
+          alt="Claris Casa & Clube - Luxury Condominium"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-black/30"></div>
@@ -41,7 +41,7 @@ export function HeroSection() {
             className="mb-8"
           >
             <h1 className="text-5xl md:text-7xl text-white mb-6 font-serif leading-tight">
-              <span className="text-[#D4AF37]">Claris</span> Casa & Club
+              <span className="text-[#D4AF37]">Claris</span> Casa & Clube
             </h1>
             <p className="text-xl md:text-2xl text-white/90 leading-relaxed">
               Casas de alto padrão com lazer completo e localização privilegiada. Parque das Rosas – A apenas 520 metros da praia.

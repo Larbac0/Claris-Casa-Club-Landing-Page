@@ -116,7 +116,7 @@ export function StrategicLocation() {
                   allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  title="Localização Claris Casa & Club - Barra da Tijuca"
+                  title="Localização Claris Casa & Clube - Barra da Tijuca"
                   onLoad={() => setMapLoaded(true)}
                   className="absolute inset-0 w-full h-full"
                 />
@@ -140,7 +140,7 @@ export function StrategicLocation() {
               </div>
               
               <div className="mt-6 text-center">
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">Claris Casa & Club</h3>
+                <h3 className="text-xl font-semibold text-gray-800 mb-2">Claris Casa & Clube</h3>
                 <p className="text-gray-600 mb-3">Av. Pref. Dulcídio Cardoso, 2900 - Barra da Tijuca - RJ</p>
                 <div className="flex items-center justify-center gap-4 text-sm text-gray-500">
                   <span className="flex items-center gap-1">

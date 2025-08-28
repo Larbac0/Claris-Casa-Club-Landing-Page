@@ -283,7 +283,7 @@ const submitChatData = async (data: ChatData) => {
                   <MessageCircle className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-sm">Claris Casa & Club</h3>
+                  <h3 className="font-semibold text-sm">Claris Casa & Clube</h3>
                   <p className="text-xs opacity-90">Corretor Virtual Exclusivo</p>
                 </div>
               </div>

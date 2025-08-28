@@ -51,7 +51,7 @@ export function ExclusiveServices() {
     } else if (index === 2) {
       // Consultoria Personalizada - Open WhatsApp
       const whatsappMessage = encodeURIComponent(
-        'Olá! Gostaria de agendar uma consultoria privada para conhecer o Claris Casa & Club. Tenho interesse em explorar as oportunidades disponíveis e entender como este projeto pode se alinhar ao meu estilo de vida.'
+        'Olá! Gostaria de agendar uma consultoria privada para conhecer o Claris Casa & Clube. Tenho interesse em explorar as oportunidades disponíveis e entender como este projeto pode se alinhar ao meu estilo de vida.'
 
       );
       window.open(`https://wa.me/5521971875960?text=${whatsappMessage}`, '_blank');

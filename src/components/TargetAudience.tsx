@@ -24,7 +24,7 @@ const personas = [
     title: 'Famílias Modernas',
     subtitle: 'Casais com Filhos',
     description: 'Famílias que priorizam segurança, qualidade de vida, proximidade a escolas e áreas de lazer para as crianças.',
-    image: '/public/img/Familia.jpg',
+    image: '/img/Familia.jpg',
     characteristics: [
       'Idade: 28-45 anos',
       'Renda familiar: R$ 15.000+',
@@ -72,7 +72,7 @@ export function TargetAudience() {
             viewport={{ once: true }}
             className="text-xl text-gray-600 max-w-3xl mx-auto"
           >
-            O Claris Casa & Club foi pensado para atender aos sonhos e necessidades 
+            O Claris Casa & Clube foi pensado para atender aos sonhos e necessidades 
             de quem busca o melhor da vida na Barra da Tijuca
           </motion.p>
         </div>

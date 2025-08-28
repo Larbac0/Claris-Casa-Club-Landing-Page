@@ -174,7 +174,7 @@ export function ClarisExclusives() {
                 Um Novo Conceito de <span className="text-[#D4AF37]">Viver com Exclusividade</span>
               </h3>
               <p className="text-lg text-gray-600 leading-relaxed mb-8">
-                No Claris Casa & Club, cada detalhe foi pensado para proporcionar uma experiência única de moradia. 
+                No Claris Casa & Clube, cada detalhe foi pensado para proporcionar uma experiência única de moradia. 
                 Combinamos tecnologia de ponta, comodidades excepcionais e localização privilegiada para criar 
                 o ambiente perfeito para quem busca o melhor da vida na Barra da Tijuca.
               </p>

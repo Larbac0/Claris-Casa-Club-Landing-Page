@@ -49,7 +49,7 @@ export function InstitutionalVideo() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-6xl text-gray-800 mb-6 font-serif">
-            Claris Casa & Club
+            Claris Casa & Clube
           </h2>
           <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-8">
             Um Novo Conceito de Viver com <span className="text-[#D4AF37] font-semibold">Exclusividade e Sofisticação</span>
@@ -70,7 +70,7 @@ export function InstitutionalVideo() {
             <div className="relative rounded-3xl overflow-hidden shadow-2xl">
               <ImageWithFallback
                 src="/img/Consultoria personalizada.jpeg"
-                alt="Claris Casa & Club - Vídeo Institucional"
+                alt="Claris Casa & Clube - Vídeo Institucional"
                 className="w-full h-80 md:h-96 object-cover"
               />
               
@@ -111,7 +111,7 @@ export function InstitutionalVideo() {
                 Conheça Cada Detalhe do Claris
               </h3>
               <p className="text-gray-600">
-                Um tour completo pelos ambientes e diferenciais que fazem do Claris Casa & Club único
+                Um tour completo pelos ambientes e diferenciais que fazem do Claris Casa & Clube único
               </p>
             </motion.div>
           </motion.div>
@@ -130,7 +130,7 @@ export function InstitutionalVideo() {
                 <br />uma Nova Forma de Viver
               </h3>
               <p className="text-lg text-gray-600 leading-relaxed mb-8">
-                O Claris Casa & Club representa a evolução do conceito de moradia de luxo na Barra da Tijuca. 
+                O Claris Casa & Clube representa a evolução do conceito de moradia de luxo na Barra da Tijuca. 
                 Cada elemento foi cuidadosamente planejado para proporcionar uma experiência única de 
                 conforto, segurança e sofisticação.
               </p>
@@ -193,7 +193,7 @@ export function InstitutionalVideo() {
         >
           <div className="max-w-4xl mx-auto bg-gradient-to-r from-gray-50 to-white rounded-3xl p-8 md:p-12 border border-gray-200">
             <blockquote className="text-xl md:text-2xl font-serif text-gray-800 italic mb-6">
-              "No Claris Casa & Club, transformamos sonhos em realidade, oferecendo não apenas um lar, 
+              "No Claris Casa & Clube, transformamos sonhos em realidade, oferecendo não apenas um lar, 
               mas um estilo de vida exclusivo e sofisticado."
             </blockquote>
             <div className="text-[#D4AF37] font-semibold text-lg">

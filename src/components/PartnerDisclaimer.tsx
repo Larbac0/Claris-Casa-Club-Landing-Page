@@ -111,7 +111,7 @@ export function PartnerDisclaimer() {
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
                   <img 
-                    src="/public/img/tegra transparente_resultado.webp" 
+                    src="/img/tegra transparente_resultado.webp" 
                     alt="Tegra Incorporadora" 
                     className="w-8 h-8 rounded"
                   />

@@ -474,7 +474,7 @@ export function VisualTour() {
               {/* After Image */}
               <ImageWithFallback
                 src="./img/Entrada_resultado_1.webp"
-                alt="Depois - Claris Casa & Club"
+                alt="Depois - Claris Casa & Clube"
                 className="absolute inset-0 w-full h-full object-cover"
                 style={{
                   clipPath: `inset(0 0 0 ${sliderPosition}%)`,

@@ -1,6 +1,6 @@
-# Claris Casa & Club - Landing Page
+# Claris Casa & Clube - Landing Page
 
-Um projeto de landing page premium para o condomínio de luxo Claris Casa & Club na Barra da Tijuca, Rio de Janeiro.
+Um projeto de landing page premium para o condomínio de luxo Claris Casa & Clube na Barra da Tijuca, Rio de Janeiro.
 
 ## 🚀 Tecnologias
 
@@ -98,4 +98,4 @@ Para dúvidas sobre o projeto, entre em contato.
 
 ---
 
-**Claris Casa & Club** - Condomínio de Luxo na Barra da Tijuca
+**Claris Casa & Clube** - Condomínio de Luxo na Barra da Tijuca

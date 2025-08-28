@@ -4,7 +4,7 @@ import { MessageCircle, X } from 'lucide-react';
 
 
 const WHATSAPP_NUMBER = '5521971875960';
-const WHATSAPP_MESSAGE = 'Olá! Gostaria de agendar uma consultoria privada para conhecer o Claris Casa & Club. Tenho interesse em explorar as oportunidades disponíveis e entender como este projeto pode se alinhar ao meu estilo de vida.';
+const WHATSAPP_MESSAGE = 'Olá! Gostaria de agendar uma consultoria privada para conhecer o Claris Casa & Clube. Tenho interesse em explorar as oportunidades disponíveis e entender como este projeto pode se alinhar ao meu estilo de vida.';
 
 
 export function WhatsAppButton() {
@@ -83,7 +83,7 @@ export function WhatsAppButton() {
                   Fale com nosso atendimento exclusivo
                 </h4>
                 <p className="text-sm text-gray-600 mb-3">
-                  Tire suas dúvidas e agende sua visita ao Claris Casa & Club — com discrição, agilidade e sofisticação.
+                  Tire suas dúvidas e agende sua visita ao Claris Casa & Clube — com discrição, agilidade e sofisticação.
                 </p>
                 <button
                   onClick={handleWhatsAppClick}

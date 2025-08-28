@@ -97,7 +97,7 @@ export function AdminDashboard() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-serif text-gray-800 mb-2">
-            Dashboard Administrativo - Claris Casa & Club
+            Dashboard Administrativo - Claris Casa & Clube
           </h1>
           <p className="text-gray-600">
             Gerencie os leads e contatos da landing page

@@ -34,7 +34,7 @@ export function YouTubeVideoModal({ isOpen, onClose, videoSrc = "./assets/videos
               <div className="flex items-center justify-between text-white">
                 <div>
                   <h3 className="text-xl font-serif">Vídeo Institucional</h3>
-                  <p className="text-white/80 text-sm">Claris Casa & Club - Barra da Tijuca</p>
+                  <p className="text-white/80 text-sm">Claris Casa & Clube - Barra da Tijuca</p>
                 </div>
                 <Button
                   onClick={onClose}
@@ -54,7 +54,7 @@ export function YouTubeVideoModal({ isOpen, onClose, videoSrc = "./assets/videos
               controls
               autoPlay
               playsInline
-              title="Vídeo Institucional Claris Casa & Club"
+              title="Vídeo Institucional Claris Casa & Clube"
             />
 
             {/* Video Title Overlay */}
@@ -64,7 +64,7 @@ export function YouTubeVideoModal({ isOpen, onClose, videoSrc = "./assets/videos
               transition={{ duration: 0.6, delay: 0.3 }}
               className="absolute bottom-6 left-6 right-6 text-white pointer-events-none z-10"
             >
-              <h4 className="text-2xl font-serif mb-2">Conheça o Claris Casa & Club</h4>
+              <h4 className="text-2xl font-serif mb-2">Conheça o Claris Casa & Clube</h4>
               <p className="text-white/90 text-lg">
                 Um novo conceito em moradia de luxo na Barra da Tijuca
               </p>

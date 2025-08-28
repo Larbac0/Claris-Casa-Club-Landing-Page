@@ -93,7 +93,7 @@ export function FloorPlanCarousel({ isOpen, onClose }: FloorPlanCarouselProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-6xl w-full h-[90vh] p-0 bg-black/95 border-none">
-        <DialogTitle className="sr-only">Plantas Privativas - Claris Casa & Club</DialogTitle>
+        <DialogTitle className="sr-only">Plantas Privativas - Claris Casa & Clube</DialogTitle>
         
         {/* Header */}
         <div className="absolute top-0 left-0 right-0 z-50 bg-gradient-to-b from-black/80 to-transparent p-6">
