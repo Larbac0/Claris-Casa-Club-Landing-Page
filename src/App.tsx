@@ -14,7 +14,12 @@ import { WhatsAppButton } from "./components/WhatsAppButton";
 import { ChatWidget } from "./components/ChatWidget";
 import { AdminDashboard } from "./components/AdminDashboard";
 import { Analytics } from '@vercel/analytics/react';
+import { createClient } from "@supabase/supabase-js";
 
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY
+);
 
 export default function App() {
   const [showAdmin, setShowAdmin] = useState(false);
