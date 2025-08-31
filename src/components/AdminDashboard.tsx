@@ -28,37 +28,55 @@ export function AdminDashboard() {
     fetchLeads();
   }, []);
 
-  const fetchLeads = async () => {
-    setLoading(true);
-    setError('');
-    const functionUrl = import.meta.env.VITE_SUPABASE_LEADS_FUNCTION_URL as string | undefined;
-    const authToken = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined; // using anon key for edge function auth header if required
-    if (!functionUrl || !authToken) {
-      setError('Variáveis de ambiente VITE_SUPABASE_LEADS_FUNCTION_URL ou VITE_SUPABASE_ANON_KEY ausentes');
-      setLoading(false);
-      return;
+// ...existing code...
+// ...existing code...
+const fetchLeads = async () => {
+  setLoading(true);
+  setError('');
+  try {
+    const adminToken = import.meta.env.VITE_SUPABASE_ADMIN_TOKEN || '';
+    const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+    console.debug('fetchLeads -> adminLen:', adminToken?.length ?? 0, 'anonLen:', anonKey?.length ?? 0);
+
+    if (!adminToken) throw new Error('VITE_SUPABASE_ADMIN_TOKEN não definido');
+
+    const res = await fetch(import.meta.env.VITE_SUPABASE_FETCH_LEADS_FUNCTION_URL!, {
+      method: 'GET',
+      headers: {
+        'x-admin-token': adminToken,
+        'apikey': anonKey,
+        'Authorization': `Bearer ${anonKey}`,
+        'Content-Type': 'application/json'
+      },
+      credentials: 'omit'
+    });
+
+    if (!res.ok) {
+      const txt = await res.text();
+      throw new Error(`${res.status} ${txt}`);
     }
-    try {
-      const response = await fetch(functionUrl, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      });
-      const result = await response.json();
-      if (response.ok) {
-        setLeads(result.leads || []);
-      } else {
-        setError(result.error || 'Erro ao carregar leads');
-      }
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error('Error fetching leads:', err);
-      setError('Erro de conexão');
-    } finally {
-      setLoading(false);
-    }
-  };
+
+    const json = await res.json();
+    setLeads((json.leads || []).map((l: any) => ({
+      id: l.id,
+      name: l.name || '',
+      email: l.email || '',
+      phone: l.phone || '',
+      message: l.message || '',
+      whatsappConsent: !!l.whatsapp_consent,
+      timestamp: l.created_at || '',
+      source: l.source || ''
+    })));
+  } catch (err: any) {
+    console.error('fetchLeads error', err);
+    setError(err.message || 'Erro ao buscar leads');
+  } finally {
+    setLoading(false);
+  }
+};
+// ...existing code...
+
+
 
   const filteredLeads = leads.filter(lead =>
     lead.name.toLowerCase().includes(searchTerm.toLowerCase()) ||

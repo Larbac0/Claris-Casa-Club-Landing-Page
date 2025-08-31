@@ -5,7 +5,7 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { Checkbox } from './ui/checkbox';
-import { supabase } from '../lib/supabaseClient';
+import { createLead } from '../lib/leadsApi';
 import { ImageWithFallback } from './ui/ImageWithFallback';
 
 export function FinalCTA() {
@@ -69,25 +69,21 @@ export function FinalCTA() {
         whatsappConsent: false,
       });
 
-      // Registrar no Supabase (melhor esforço - não bloqueia o usuário)
+      // Registrar lead (melhor esforço - não bloqueia o usuário)
       try {
-        const { error: supaError } = await supabase.from('leads').insert({
+        await createLead({
           name: formData.name,
           email: formData.email,
-            phone: formData.phone,
+          phone: formData.phone,
           message: formData.message || null,
-          whatsapp_consent: formData.whatsappConsent,
+          whatsappConsent: formData.whatsappConsent,
           source: 'final_cta',
           page_url: typeof window !== 'undefined' ? window.location.href : null,
           page_title: typeof document !== 'undefined' ? document.title : null,
         });
-        if (supaError) {
-          // eslint-disable-next-line no-console
-          console.warn('[Supabase] Falha ao registrar lead:', supaError.message);
-        }
       } catch (e) {
         // eslint-disable-next-line no-console
-        console.warn('[Supabase] Erro inesperado ao inserir lead', e);
+        console.warn('[leadsApi] Falha ao registrar lead (melhor esforço):', e);
       }
 
       // Pixel & Analytics (igual você já tinha)

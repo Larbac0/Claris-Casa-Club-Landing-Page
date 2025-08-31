@@ -1,6 +1,12 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = 'https://xvnjaxbrlvvdufbcaysd.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh2bmpheGJybHZ2ZHVmYmNheXNkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4NjkxMDAsImV4cCI6MjA3MTQ0NTEwMH0.lYH5EVW66A4FwFnCKTvchmiSpZTvbvvDwxu1rC3rZfA';
+// Use VITE_ environment variables injected by Vite. This keeps credentials out of source.
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
+
+if (!supabaseUrl || !supabaseAnonKey) {
+	// eslint-disable-next-line no-console
+	console.warn('Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY in environment. Supabase client may fail.');
+}
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);

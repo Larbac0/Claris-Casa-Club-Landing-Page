@@ -11,6 +11,7 @@ interface Message {
   timestamp: Date;
   isTyping?: boolean;
 }
+import { createLead } from '../lib/leadsApi';
 
 interface ChatData {
   name: string;
@@ -188,9 +189,27 @@ const submitChatData = async (data: ChatData) => {
     }
 
 
-    setSubmitStatus('success');
-    // Mensagens automáticas já presentes no chat
-    setTimeout(() => { setIsMinimized(true); }, 8000);
+      setSubmitStatus('success');
+
+      // Registrar lead no Supabase (melhor esforço, não bloqueia o usuário)
+      try {
+        await createLead({
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          message: data.interest || 'chat lead',
+          whatsappConsent: false,
+          source: 'chat_widget',
+          page_url: typeof window !== 'undefined' ? window.location.href : null,
+          page_title: typeof document !== 'undefined' ? document.title : null,
+        });
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.warn('[leadsApi] failed to create chat lead', err);
+      }
+
+      // Mensagens automáticas já presentes no chat
+      setTimeout(() => { setIsMinimized(true); }, 8000);
 
   } catch (error) {
     console.error('Error submitting chat data:', error);

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X } from 'lucide-react';
+import { createLead } from '../lib/leadsApi';
 
 
 const WHATSAPP_NUMBER = '5521971875960';
@@ -43,6 +44,24 @@ export function WhatsAppButton() {
   }, [isVisible]);
 
   const handleWhatsAppClick = () => {
+    // Record lead with whatsapp consent (best-effort)
+    try {
+      createLead({
+        name: null,
+        email: null,
+        phone: WHATSAPP_NUMBER,
+        message: WHATSAPP_MESSAGE,
+        whatsappConsent: true,
+        source: 'whatsapp_button',
+        page_url: typeof window !== 'undefined' ? window.location.href : null,
+        page_title: typeof document !== 'undefined' ? document.title : null,
+      });
+    } catch (err) {
+      // swallow errors, still open WhatsApp
+      // eslint-disable-next-line no-console
+      console.warn('[leadsApi] failed to create whatsapp lead', err);
+    }
+
     const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
     window.open(whatsappUrl, '_blank');
     
