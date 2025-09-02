@@ -28,36 +28,54 @@ export function AdminDashboard() {
     fetchLeads();
   }, []);
 
-// ...existing code...
+
 // ...existing code...
 const fetchLeads = async () => {
   setLoading(true);
   setError('');
   try {
-    const adminToken = import.meta.env.VITE_SUPABASE_ADMIN_TOKEN || '';
-    const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
-    console.debug('fetchLeads -> adminLen:', adminToken?.length ?? 0, 'anonLen:', anonKey?.length ?? 0);
+    const adminToken = import.meta.env.VITE_SUPABASE_ADMIN_TOKEN as string | undefined;
+    const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
+    const fnUrl = import.meta.env.VITE_SUPABASE_FETCH_LEADS_FUNCTION_URL as string | undefined;
 
-    if (!adminToken) throw new Error('VITE_SUPABASE_ADMIN_TOKEN não definido');
-
-    const res = await fetch(import.meta.env.VITE_SUPABASE_FETCH_LEADS_FUNCTION_URL!, {
-      method: 'GET',
-      headers: {
-        'x-admin-token': adminToken,
-        'apikey': anonKey,
-        'Authorization': `Bearer ${anonKey}`,
-        'Content-Type': 'application/json'
-      },
-      credentials: 'omit'
-    });
-
-    if (!res.ok) {
-      const txt = await res.text();
-      throw new Error(`${res.status} ${txt}`);
+    // Local/dev: if VITE admin token is present, call the Supabase Edge Function directly (keeps current dev behavior)
+    if (adminToken && fnUrl) {
+      const res = await fetch(fnUrl, {
+        method: 'GET',
+        headers: {
+          'x-admin-token': adminToken,
+          'apikey': anonKey || '',
+          'Authorization': anonKey ? `Bearer ${anonKey}` : '',
+          'Content-Type': 'application/json'
+        },
+        credentials: 'omit'
+      });
+      if (!res.ok) {
+        const txt = await res.text();
+        throw new Error(`${res.status} ${txt}`);
+      }
+      const json = await res.json();
+      setLeads((json.leads || []).map((l: any) => ({
+        id: l.id,
+        name: l.name || '',
+        email: l.email || '',
+        phone: l.phone || '',
+        message: l.message || '',
+        whatsappConsent: !!l.whatsapp_consent,
+        timestamp: l.created_at || '',
+        source: l.source || ''
+      })));
+      return;
     }
 
-    const json = await res.json();
-    setLeads((json.leads || []).map((l: any) => ({
+    // Production/Vercel: call serverless proxy (keeps ADMIN_TOKEN server-only)
+    const proxyRes = await fetch('/api/get-leads', { method: 'GET' });
+    if (!proxyRes.ok) {
+      const txt = await proxyRes.text();
+      throw new Error(`${proxyRes.status} ${txt}`);
+    }
+    const proxyJson = await proxyRes.json();
+    setLeads((proxyJson.leads || []).map((l: any) => ({
       id: l.id,
       name: l.name || '',
       email: l.email || '',
@@ -75,8 +93,6 @@ const fetchLeads = async () => {
   }
 };
 // ...existing code...
-
-
 
   const filteredLeads = leads.filter(lead =>
     lead.name.toLowerCase().includes(searchTerm.toLowerCase()) ||

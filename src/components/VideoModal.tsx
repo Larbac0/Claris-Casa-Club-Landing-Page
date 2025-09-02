@@ -27,7 +27,7 @@ export function VideoModal({ isOpen, onClose }: VideoModalProps) {
   const controlsTimeoutRef = useRef<NodeJS.Timeout>();
   const volumeTimeoutRef = useRef<NodeJS.Timeout>();
 
-  const videoUrl = 'assets/videos/Tegra apresenta_ Claris Casa & Clube.mp4';
+  const videoUrl = 'assets/videos/Tegra apresenta_ Claris Casa & Clube.webm';
 
   // Reset video when modal opens/closes
   useEffect(() => {

@@ -8,7 +8,7 @@ interface LocalVideoModalProps {
   videoSrc?: string;
 }
 
-export function YouTubeVideoModal({ isOpen, onClose, videoSrc = "./assets/videos/Vídeo-sem-título-‐-Feito-com-o-Clipchamp-_1_.webm" }: LocalVideoModalProps) {
+export function YouTubeVideoModal({ isOpen, onClose, videoSrc = "./assets/videos/Video institucional.webm" }: LocalVideoModalProps) {
 
   return (
     <AnimatePresence>
