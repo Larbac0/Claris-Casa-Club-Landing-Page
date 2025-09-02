@@ -25,10 +25,23 @@ export function HeroSection() {
       <div className="absolute inset-0">
         <ImageWithFallback
           src={heroImage}
-          alt="Claris Casa & Clube - Luxury Condominium"
+          alt="Claris Casa & Club - Luxury Condominium"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-black/30"></div>
+      </div>
+
+      {/* Header with Broker Identity */}
+      <div className="absolute top-6 left-6 right-6 z-20 flex justify-between items-start">
+        <div className="bg-white/10 backdrop-blur-md rounded-lg px-4 py-2 border border-white/20">
+          <div className="text-white/90 text-sm">
+            <div className="font-medium">Seu corretor exclusivo: Damião José</div>
+            <div className="text-xs text-white/70">CRECI/RJ nº 23.559</div>
+          </div>
+        </div>
+        <div className="bg-white/10 backdrop-blur-md rounded-lg px-3 py-2 border border-white/20">
+          <div className="text-[#D4AF37] font-serif text-sm font-medium">TEGRA</div>
+        </div>
       </div>
 
       {/* Content */}
@@ -41,7 +54,7 @@ export function HeroSection() {
             className="mb-8"
           >
             <h1 className="text-5xl md:text-7xl text-white mb-6 font-serif leading-tight">
-              <span className="text-[#D4AF37]">Claris</span> Casa & Clube
+              <span className="text-[#D4AF37]">Claris</span> Casa & Club
             </h1>
             <p className="text-xl md:text-2xl text-white/90 leading-relaxed">
               Casas de alto padrão com lazer completo e localização privilegiada. Parque das Rosas – A apenas 520 metros da praia.
@@ -72,7 +85,7 @@ export function HeroSection() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2, duration: 1 }}
-        className="absolute bottom-10 left-1/2"
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
       >
         <div className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center">
           <motion.div
@@ -80,16 +93,6 @@ export function HeroSection() {
             transition={{ duration: 1.5, repeat: Infinity }}
             className="w-1 h-3 bg-white/70 rounded-full mt-2"
           />
-        </div>
-        <div className="flex flex-col items-center justify-center transform -translate-x-1/2">
-          <img
-            src="./img/tegra transparente_resultado.webp"
-            alt="Logo tegra"
-            className="mb-0 mt-0 w-auto h-12 md:h-30"
-          />
-          <p className="text-white/100 text-sm mt-0 text-center">
-            Corretor Parceiro Damião José - CRECI/RJ nº 23.559
-          </p>
         </div>
       </motion.div>
     </div>
