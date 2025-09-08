@@ -36,10 +36,10 @@ export default function App() {
     <div className="min-h-screen bg-white">
       <HeroSection />
       <PartnerDisclaimer />
-      <ClarisExclusives />
       <InstitutionalVideo />
       <WhyClaris />
       <VisualTour />
+      <ClarisExclusives />
       <ExclusiveServices />
       <StrategicLocation />
       <FinalCTA />

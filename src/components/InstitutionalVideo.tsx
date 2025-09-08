@@ -1,35 +1,12 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Play, Award, Users, MapPin, Calendar } from 'lucide-react';
+import { Play, } from 'lucide-react';
 import { Button } from './ui/button';
 import { YouTubeVideoModal } from './VideoInstitutional';
 import { ImageWithFallback } from './ui/ImageWithFallback';
 
 export function InstitutionalVideo() {
   const [showVideo, setShowVideo] = useState(false);
-
-  const highlights = [
-    {
-      icon: Award,
-      title: "Qualidade Comprovada",
-      description: "Mais de 30 anos de tradição em empreendimentos de luxo"
-    },
-    {
-      icon: MapPin,
-      title: "Localização Premium",
-      description: "Barra da Tijuca, próximo às melhores praias e centros comerciais"
-    },
-    {
-      icon: Users,
-      title: "Atendimento Personalizado",
-      description: "Equipe especializada para realizar seus sonhos imobiliários"
-    },
-    {
-      icon: Calendar,
-      title: "Entrega Garantida",
-      description: "Pontualidade e transparência em todas as etapas do projeto"
-    }
-  ];
 
   return (
     <section className="py-20 bg-white relative overflow-hidden">
@@ -134,32 +111,6 @@ export function InstitutionalVideo() {
                 Cada elemento foi cuidadosamente planejado para proporcionar uma experiência única de 
                 conforto, segurança e sofisticação.
               </p>
-            </div>
-
-            {/* Highlights */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {highlights.map((highlight, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  className="flex items-start gap-4 p-4 rounded-xl hover:bg-gray-50 transition-colors duration-300"
-                >
-                  <div className="w-12 h-12 bg-gradient-to-r from-[#D4AF37] to-[#B8941F] rounded-xl flex items-center justify-center text-white flex-shrink-0">
-                    <highlight.icon className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-800 mb-1">
-                      {highlight.title}
-                    </h4>
-                    <p className="text-sm text-gray-600">
-                      {highlight.description}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
             </div>
 
             {/* CTA Button */}
