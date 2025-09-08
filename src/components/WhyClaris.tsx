@@ -123,11 +123,6 @@ export function WhyClaris() {
           viewport={{ once: true }}
           className="text-center mt-16"
         >
-          <div className="inline-block bg-[#D4AF37]/10 px-8 py-4 rounded-full">
-            <p className="text-lg text-gray-700">
-              <span className="font-semibold text-[#B8941F]">Mais que um investimento,</span> é a realização de um sonho
-            </p>
-          </div>
         </motion.div>
       </div>
     </section>

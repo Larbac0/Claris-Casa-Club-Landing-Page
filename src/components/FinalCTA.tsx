@@ -343,6 +343,29 @@ export function FinalCTA() {
             </p>
           </div>
         </motion.div>
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            viewport={{ once: true }}
+            className="mt-8 pt-6 border-t border-gray-200"
+          >
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <img 
+                    src="/img/tegra transparente_resultado.webp" 
+                    alt="Tegra Incorporadora" 
+                    className="w-8 h-8 rounded"
+                  />
+                  <span className="text-sm text-gray-600">Tegra Incorporadora</span>
+                </div>
+              </div>
+              <div className="text-sm text-gray-500">
+                Corretor Parceiro Damião José - CRECI/RJ nº 23.559
+              </div>
+            </div>
+          </motion.div>
       </div>
     </section>
   );

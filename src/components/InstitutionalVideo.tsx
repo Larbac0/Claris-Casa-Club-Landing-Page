@@ -191,15 +191,6 @@ export function InstitutionalVideo() {
           viewport={{ once: true }}
           className="mt-20 text-center"
         >
-          <div className="max-w-4xl mx-auto bg-gradient-to-r from-gray-50 to-white rounded-3xl p-8 md:p-12 border border-gray-200">
-            <blockquote className="text-xl md:text-2xl font-serif text-gray-800 italic mb-6">
-              "No Claris Casa & Clube, transformamos sonhos em realidade, oferecendo não apenas um lar, 
-              mas um estilo de vida exclusivo e sofisticado."
-            </blockquote>
-            <div className="text-[#D4AF37] font-semibold text-lg">
-              — Tegra Incorporadora, 3 décadas de tradição
-            </div>
-          </div>
         </motion.div>
       </div>
       {/* Video Modal */}

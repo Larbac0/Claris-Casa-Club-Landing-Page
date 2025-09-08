@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Info, Shield, User, Building } from 'lucide-react';
+import { Info, Shield } from 'lucide-react';
 
 export function PartnerDisclaimer() {
   return (
@@ -41,88 +41,6 @@ export function PartnerDisclaimer() {
               </div>
             </div>
           </div>
-
-          {/* Features Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              viewport={{ once: true }}
-              className="bg-white rounded-lg p-6 shadow-sm border border-gray-200"
-            >
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 bg-[#D4AF37]/10 rounded-lg flex items-center justify-center">
-                  <Building className="w-5 h-5 text-[#D4AF37]" />
-                </div>
-                <h4 className="font-semibold text-gray-800">Parceria Oficial</h4>
-              </div>
-              <p className="text-sm text-gray-600">
-                Corretor credenciado pela Tegra Incorporadora com acesso direto às informações e condições especiais.
-              </p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              viewport={{ once: true }}
-              className="bg-white rounded-lg p-6 shadow-sm border border-gray-200"
-            >
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 bg-[#D4AF37]/10 rounded-lg flex items-center justify-center">
-                  <User className="w-5 h-5 text-[#D4AF37]" />
-                </div>
-                <h4 className="font-semibold text-gray-800">Atendimento Especializado</h4>
-              </div>
-              <p className="text-sm text-gray-600">
-                Experiência exclusiva em imóveis de luxo na Barra da Tijuca, com conhecimento profundo do mercado.
-              </p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              viewport={{ once: true }}
-              className="bg-white rounded-lg p-6 shadow-sm border border-gray-200"
-            >
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 bg-[#D4AF37]/10 rounded-lg flex items-center justify-center">
-                  <Shield className="w-5 h-5 text-[#D4AF37]" />
-                </div>
-                <h4 className="font-semibold text-gray-800">Discrição Total</h4>
-              </div>
-              <p className="text-sm text-gray-600">
-                Atendimento confidencial e personalizado, respeitando a privacidade de cada cliente.
-              </p>
-            </motion.div>
-          </div>
-
-          {/* Footer */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            viewport={{ once: true }}
-            className="mt-8 pt-6 border-t border-gray-200"
-          >
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2">
-                  <img 
-                    src="/img/tegra transparente_resultado.webp" 
-                    alt="Tegra Incorporadora" 
-                    className="w-8 h-8 rounded"
-                  />
-                  <span className="text-sm text-gray-600">Tegra Incorporadora</span>
-                </div>
-              </div>
-              <div className="text-sm text-gray-500">
-                Corretor Parceiro Damião José - CRECI/RJ nº 23.559
-              </div>
-            </div>
-          </motion.div>
         </motion.div>
       </div>
     </section>

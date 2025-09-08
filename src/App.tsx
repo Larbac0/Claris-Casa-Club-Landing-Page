@@ -5,9 +5,7 @@ import { InstitutionalVideo } from "./components/InstitutionalVideo";
 import { WhyClaris } from "./components/WhyClaris";
 import { VisualTour } from "./components/VisualTour";
 import { ExclusiveServices } from "./components/ExclusiveServices";
-import { ExcellenceSection } from "./components/ExcellenceSection";
 import { StrategicLocation } from "./components/StrategicLocation";
-import { TargetAudience } from "./components/TargetAudience";
 import { FinalCTA } from "./components/FinalCTA";
 import { PartnerDisclaimer } from "./components/PartnerDisclaimer";
 import { WhatsAppButton } from "./components/WhatsAppButton";
@@ -37,16 +35,14 @@ export default function App() {
   return (
     <div className="min-h-screen bg-white">
       <HeroSection />
+      <PartnerDisclaimer />
       <ClarisExclusives />
       <InstitutionalVideo />
       <WhyClaris />
       <VisualTour />
       <ExclusiveServices />
-      <ExcellenceSection />
       <StrategicLocation />
-      <TargetAudience />
       <FinalCTA />
-      <PartnerDisclaimer />
       <WhatsAppButton />
       <ChatWidget />
       <Analytics />
