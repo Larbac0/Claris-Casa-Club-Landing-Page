@@ -31,6 +31,13 @@ export function AdminDashboard() {
   const [endpointDiagnostics, setEndpointDiagnostics] = useState<{ url: string; ok: boolean; error?: string }[]>([]);
   const [overrideEndpoint, setOverrideEndpoint] = useState<string>(import.meta.env.VITE_LEADS_ENDPOINT_OVERRIDE || '');
   const adminToken = import.meta.env.VITE_SUPABASE_ADMIN_TOKEN || '';
+  const [adminTokenLocal, setAdminTokenLocal] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = sessionStorage.getItem('adminTokenOverride');
+      if (saved) return saved;
+    }
+    return adminToken;
+  });
   const [authError, setAuthError] = useState(false);
   let supabaseRef: SupabaseClient | null = null;
 
@@ -96,7 +103,7 @@ export function AdminDashboard() {
       for (const url of urls) {
         try {
           const headers: Record<string, string> = { 'Accept': 'application/json' };
-          if (adminToken) headers['x-admin-token'] = adminToken;
+          if (adminTokenLocal) headers['x-admin-token'] = adminTokenLocal;
           if (anonKey) {
             headers['apikey'] = anonKey;
             headers['Authorization'] = `Bearer ${anonKey}`;
@@ -110,7 +117,6 @@ export function AdminDashboard() {
             setEndpointDiagnostics(d => [...d, { url, ok: false, error: errMsg }]);
             if (status === 401) {
               setAuthError(true);
-              // 401: não continua testando outros se a function principal falhou (primeira URL)
               if (url === urls[0]) break;
             }
             throw new Error(errMsg);
@@ -268,17 +274,29 @@ export function AdminDashboard() {
           </div>
         )}
         <div className="mb-2 text-[11px] font-mono text-gray-500">
-          Envio de header x-admin-token: {adminToken ? 'SIM' : 'NÃO'} {adminToken && `(len=${adminToken.length})`}
+          Envio de header x-admin-token: {adminTokenLocal ? 'SIM' : 'NÃO'} {adminTokenLocal && `(len=${adminTokenLocal.length})`}
         </div>
-
-        {/* Override Endpoint Config */}
         <div className="mb-4 p-3 rounded border bg-white flex flex-col gap-2">
-          <div className="flex flex-col sm:flex-row gap-2 items-start sm:items-end">
-            <div className="flex-1 w-full">
-              <label className="text-xs font-medium text-gray-600">Override Endpoint (VITE_LEADS_ENDPOINT_OVERRIDE)</label>
-              <Input placeholder="https://..." value={overrideEndpoint} onChange={e => setOverrideEndpoint(e.target.value)} />
+          <div className="grid gap-2 sm:grid-cols-3">
+            <div className="sm:col-span-2 flex flex-col gap-1">
+              <label className="text-[11px] font-medium text-gray-600">Override Admin Token (session)</label>
+              <Input
+                type="text"
+                placeholder="Cole o ADMIN_TOKEN para testar"
+                value={adminTokenLocal}
+                onChange={e => {
+                  const v = e.target.value.trim();
+                  setAdminTokenLocal(v);
+                  if (typeof window !== 'undefined') {
+                    if (v) sessionStorage.setItem('adminTokenOverride', v); else sessionStorage.removeItem('adminTokenOverride');
+                  }
+                }}
+              />
+              <p className="text-[10px] text-gray-500">Não será persistido no build, apenas na sessão. Primeiro/último chars: {adminTokenLocal ? `${adminTokenLocal[0]}...${adminTokenLocal[adminTokenLocal.length-1]}` : '—'}</p>
             </div>
-            <Button variant="outline" onClick={fetchLeads}>Aplicar / Reload</Button>
+            <div className="flex items-end gap-2">
+              <Button variant="outline" className="w-full" onClick={fetchLeads}>Testar Token</Button>
+            </div>
           </div>
           {endpointDiagnostics.length > 0 && (
             <div className="text-xs text-gray-600 flex flex-col gap-1 max-h-40 overflow-auto">
