@@ -59,10 +59,10 @@ export function ChatWidget() {
   useEffect(() => {
     if (isOpen && messages.length === 0) {
       setTimeout(() => {
-        addBotMessage("Olá! 👋 Bem-vindo ao Claris Casa & Club! Sou o assistente virtual e estou aqui para ajudar você a conhecer este empreendimento exclusivo na Barra da Tijuca.");
+        addBotMessage("Olá 👋 Seja muito bem-vindo ao universo Claris — onde sofisticação, privacidade e natureza se encontram em perfeita harmonia.");
         
         setTimeout(() => {
-          addBotMessage("Para oferecer o melhor atendimento personalizado, vou precisar de algumas informações básicas. Vamos começar?");
+          addBotMessage("Sou seu corretor pessoal e estou aqui para guiá-lo por cada detalhe deste empreendimento único do Parque das Rosas - Barra da Tijuca. Posso começar te chamando pelo nome? Isso me ajuda a oferecer um atendimento mais próximo e exclusivo.");
           setChatStep('name');
         }, 2000);
       }, 1000);
