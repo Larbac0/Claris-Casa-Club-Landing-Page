@@ -89,7 +89,7 @@ export function WhatsAppButton() {
             exit={{ opacity: 0, x: 20 }}
             className="absolute bottom-16 right-0 mb-2"
           >
-              <div className="bg-white rounded-2xl shadow-2xl p-4 max-w-md border border-gray-100 relative w-96">
+              <div className="bg-white rounded-2xl shadow-2xl p-4 max-w-md border border-gray-100 relative">
               <button
                 onClick={() => setShowTooltip(false)}
                 className="absolute top-2 right-2 w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"

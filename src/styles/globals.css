@@ -222,6 +222,51 @@
   }
 }
 
+/* Prevent horizontal scrolling and ensure media fits the viewport */
+html, body, #root {
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+/* Make sure all elements use border-box */
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+/* Ensure media does not overflow horizontally.
+   NOTE: avoid forcing height:auto globally because it overrides Tailwind height utilities (e.g. h-64, h-full)
+   which are used together with object-cover/object-contain to make images fill their containers. */
+img, picture, video, svg {
+  max-width: 100%;
+  display: block;
+  /* do not set height here so Tailwind height utilities can apply */
+}
+
+/* If an image/component has an explicit Tailwind height utility (contains "h-"), keep its sizing
+   and ensure object-fit behaves as expected. */
+img.object-cover, picture.object-cover, video.object-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+img.object-contain, picture.object-contain, video.object-contain {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* For images without an explicit height utility, preserve natural aspect ratio */
+img:not([class*="h-"]) , picture:not([class*="h-"]) {
+  height: auto;
+}
+
+/* Small helper to constrain wide popovers/tooltips on small screens */
+.responsive-maxw {
+  max-width: calc(100vw - 48px); /* leave some gutter on mobile */
+  width: auto;
+}
+
 html {
   font-size: var(--font-size);
 }

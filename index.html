@@ -4,17 +4,153 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/webp" href="/img/logo_resultado.webp" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- SEO / Social - enhanced -->
+    <link rel="canonical" href="https://site.com/" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#D4AF37" />
+
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content="Claris Casa & Clube" />
     <meta property="og:title" content="Claris Casa & Clube">
     <meta property="og:description" content="Descubra o Claris Casa & Clube, empreendimento de luxo na Barra da Tijuca com vista para o mar, acabamentos premium e localização privilegiada.">
     <meta property="og:image" content="https://site.com/imagem.jpg">
     <meta property="og:url" content="https://site.com">
     <meta property="og:type" content="website">
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@SeuTwitter" />
+    <meta name="twitter:title" content="Claris Casa & Clube" />
+    <meta name="twitter:description" content="Empreendimento de luxo na Barra da Tijuca com vista para o mar e acabamentos premium." />
+    <meta name="twitter:image" content="https://site.com/imagem.jpg" />
+
     <meta name="keywords" content="Claris, Casa, Club, Clube, empreendimento, Barra da Tijuca, luxo, condomínio, vista para o mar, acabamentos premium, localização privilegiada, Claris Casa & Clube, Parque das Rosas">
     <meta name="author" content="SoftWave Solutions">
     <title>Claris Casa & Clube - Condomínio de Luxo na Barra da Tijuca</title>
     <meta name="description" content="Descubra o Claris Casa & Clube, empreendimento de luxo na Barra da Tijuca com vista para o mar, acabamentos premium e localização privilegiada." />
+
+    <!-- Google Analytics 4 - substituir G-XXXXXXXXXX pelo Measurement ID -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      // Substitua 'G-XXXXXXXXXX' pelo seu Measurement ID
+      gtag('config', 'G-XXXXXXXXXX', { 'send_page_view': true });
+    </script>
+
+    <!-- Facebook Pixel - substituir YOUR_PIXEL_ID pelo ID do pixel -->
+    <script>
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+      // Substitua 'YOUR_PIXEL_ID' pelo seu Facebook Pixel ID
+      fbq('init', 'YOUR_PIXEL_ID');
+      fbq('track', 'PageView');
+    </script>
+    <noscript>
+      <img height="1" width="1" style="display:none"
+        src="https://www.facebook.com/tr?id=YOUR_PIXEL_ID&ev=PageView&noscript=1"
+      />
+    </noscript>
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://site.com/#organization",
+          "name": "Claris Casa & Clube",
+          "url": "https://site.com/",
+          "logo": "https://site.com/img/logo_resultado.webp",
+          "sameAs": [
+            "https://www.facebook.com/yourpage",
+            "https://www.instagram.com/yourprofile"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://site.com/#website",
+          "url": "https://site.com/",
+          "name": "Claris Casa & Clube",
+          "author": {
+            "@id": "https://site.com/#organization"
+          },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://site.com/?s={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "LocalBusiness",
+          "@id": "https://site.com/#localbusiness",
+          "name": "Claris Casa & Clube",
+          "image": "https://site.com/imagem.jpg",
+          "telephone": "+5521XXXXXXXXX",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Av. Pref. Dulcídio Cardoso, 2900",
+            "addressLocality": "Barra da Tijuca",
+            "addressRegion": "RJ",
+            "postalCode": "XXXXX-XXX",
+            "addressCountry": "BR"
+          },
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": -23.005366,
+            "longitude": -43.349973
+          },
+          "url": "https://site.com/",
+          "sameAs": [
+            "https://www.facebook.com/yourpage",
+            "https://www.instagram.com/yourprofile"
+          ],
+          "openingHoursSpecification": [
+            {
+              "@type": "OpeningHoursSpecification",
+              "dayOfWeek": [
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday"
+              ],
+              "opens": "09:00",
+              "closes": "18:00"
+            }
+          ]
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://site.com/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Localização",
+              "item": "https://site.com/#localizacao"
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+
   </head>
-  <body>
+  <body class="overflow-x-hidden">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
