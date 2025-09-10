@@ -29,7 +29,6 @@ export function AdminDashboard() {
   const [syncingAll, setSyncingAll] = useState(false);
   const [syncingIds, setSyncingIds] = useState<Record<string, boolean>>({});
   const [endpointDiagnostics, setEndpointDiagnostics] = useState<{ url: string; ok: boolean; error?: string }[]>([]);
-  const [overrideEndpoint, setOverrideEndpoint] = useState<string>(import.meta.env.VITE_LEADS_ENDPOINT_OVERRIDE || '');
   const adminToken = import.meta.env.VITE_SUPABASE_ADMIN_TOKEN || '';
   const [adminTokenLocal, setAdminTokenLocal] = useState<string>(() => {
     if (typeof window !== 'undefined') {
@@ -48,7 +47,6 @@ export function AdminDashboard() {
 
   const resolveFetchLeadsUrls = () => {
     const list: string[] = [];
-    if (overrideEndpoint) list.push(overrideEndpoint.trim());
     const fnUrl = import.meta.env.VITE_SUPABASE_FETCH_LEADS_FUNCTION_URL as string | undefined;
     if (fnUrl) {
       list.push(fnUrl); // se function configurada, não tentamos outros para evitar 404/401 desnecessários
