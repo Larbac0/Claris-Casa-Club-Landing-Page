@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Users, Mail, Phone, Calendar, Eye, Download, Search, Filter } from 'lucide-react';
+import { Users, Mail, Phone, Calendar, Eye, Download, Search, Filter, ArrowLeft, RefreshCcw, CloudUpload } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 interface Lead {
   id: string;
@@ -14,6 +15,9 @@ interface Lead {
   whatsappConsent: boolean;
   timestamp: string;
   source: string;
+  hubspotId?: string | null;
+  hubspotSyncStatus?: 'pending' | 'synced' | 'error';
+  hubspotSyncError?: string | null;
 }
 
 export function AdminDashboard() {
@@ -22,77 +26,189 @@ export function AdminDashboard() {
   const [error, setError] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
+  const [syncingAll, setSyncingAll] = useState(false);
+  const [syncingIds, setSyncingIds] = useState<Record<string, boolean>>({});
+  const [endpointDiagnostics, setEndpointDiagnostics] = useState<{ url: string; ok: boolean; error?: string }[]>([]);
+  const [overrideEndpoint, setOverrideEndpoint] = useState<string>(import.meta.env.VITE_LEADS_ENDPOINT_OVERRIDE || '');
+  let supabaseRef: SupabaseClient | null = null;
 
   // Load leads from Supabase
   useEffect(() => {
     fetchLeads();
   }, []);
 
-
-// ...existing code...
-const fetchLeads = async () => {
-  setLoading(true);
-  setError('');
-  try {
-    const adminToken = import.meta.env.VITE_SUPABASE_ADMIN_TOKEN as string | undefined;
-    const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
+  const resolveFetchLeadsUrls = () => {
+    const list: string[] = [];
+    if (overrideEndpoint) list.push(overrideEndpoint.trim());
     const fnUrl = import.meta.env.VITE_SUPABASE_FETCH_LEADS_FUNCTION_URL as string | undefined;
+    if (fnUrl) list.push(fnUrl);
+    list.push('/api/get-leads');
+    list.push('/.netlify/functions/get-leads');
+    list.push('/api/functions/get-leads');
+    // Remove duplicados mantendo ordem
+    return Array.from(new Set(list.filter(Boolean)));
+  };
 
-    // Local/dev: if VITE admin token is present, call the Supabase Edge Function directly (keeps current dev behavior)
-    if (adminToken && fnUrl) {
-      const res = await fetch(fnUrl, {
-        method: 'GET',
-        headers: {
-          'x-admin-token': adminToken,
-          'apikey': anonKey || '',
-          'Authorization': anonKey ? `Bearer ${anonKey}` : '',
-          'Content-Type': 'application/json'
-        },
-        credentials: 'omit'
-      });
-      if (!res.ok) {
-        const txt = await res.text();
-        throw new Error(`${res.status} ${txt}`);
+  const mapLeads = (arr: any[]): Lead[] => (arr || []).map((l: any) => ({
+    id: l.id,
+    name: l.name || '',
+    email: l.email || '',
+    phone: l.phone || '',
+    message: l.message || '',
+    whatsappConsent: !!(l.whatsapp_consent ?? l.whatsappConsent),
+    timestamp: l.created_at || l.timestamp || '',
+    source: l.source || '',
+    hubspotId: l.hubspot_id || l.hubspotId || null,
+    hubspotSyncStatus: l.hubspot_id ? 'synced' : 'pending',
+    hubspotSyncError: null
+  }));
+
+  const fetchLeadsDirectFromSupabase = async (): Promise<Lead[] | null> => {
+    try {
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined;
+      const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
+      if (!supabaseUrl || !anonKey) return null;
+      if (!supabaseRef) supabaseRef = createClient(supabaseUrl, anonKey, { auth: { persistSession: false } });
+      const { data, error } = await supabaseRef.from('leads').select('*').order('created_at', { ascending: false }).limit(1000);
+      if (error) throw error;
+      return mapLeads(data as any[]);
+    } catch (e) {
+      console.warn('Fallback Supabase direto falhou', e);
+      return null;
+    }
+  };
+
+  const fetchLeads = async () => {
+    setLoading(true);
+    setError('');
+    setEndpointDiagnostics([]);
+    try {
+      const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
+      const adminToken = import.meta.env.VITE_SUPABASE_ADMIN_TOKEN as string | undefined;
+      const urls = resolveFetchLeadsUrls();
+      let lastErr: any = null;
+      for (const url of urls) {
+        try {
+          const headers: Record<string, string> = { 'Accept': 'application/json' };
+          if (adminToken) headers['x-admin-token'] = adminToken;
+          if (anonKey) {
+            headers['apikey'] = anonKey;
+            headers['Authorization'] = `Bearer ${anonKey}`;
+          }
+          const res = await fetch(url, { method: 'GET', headers, credentials: 'omit' });
+          const contentType = res.headers.get('content-type') || '';
+          if (!res.ok) {
+            const preview = await res.text();
+            const errMsg = `HTTP ${res.status} ${url} corpo: ${preview.slice(0,100)}`;
+            setEndpointDiagnostics(d => [...d, { url, ok: false, error: errMsg }]);
+            throw new Error(errMsg);
+          }
+          if (!contentType.includes('application/json')) {
+            const textBody = await res.text();
+            const errMsg = `Não JSON (${contentType}) ${url} início: ${textBody.slice(0,80)}`;
+            setEndpointDiagnostics(d => [...d, { url, ok: false, error: errMsg }]);
+            throw new Error(errMsg);
+          }
+          let json: any = null;
+          try { json = await res.json(); } catch (parseErr: any) {
+            const errMsg = `Parse JSON falhou ${url}: ${parseErr.message}`;
+            setEndpointDiagnostics(d => [...d, { url, ok: false, error: errMsg }]);
+            throw new Error(errMsg);
+          }
+          if (json && (json.leads || Array.isArray(json))) {
+            const raw = json.leads || json;
+            const mapped = mapLeads(raw);
+            setLeads(mapped);
+            setEndpointDiagnostics(d => [...d, { url, ok: true }]);
+            lastErr = null;
+            break;
+          } else {
+            const errMsg = `Formato inesperado ${url} keys: ${Object.keys(json||{}).join(',')}`;
+            setEndpointDiagnostics(d => [...d, { url, ok: false, error: errMsg }]);
+            throw new Error(errMsg);
+          }
+        } catch (inner) {
+          lastErr = inner;
+          continue;
+        }
       }
-      const json = await res.json();
-      setLeads((json.leads || []).map((l: any) => ({
-        id: l.id,
-        name: l.name || '',
-        email: l.email || '',
-        phone: l.phone || '',
-        message: l.message || '',
-        whatsappConsent: !!l.whatsapp_consent,
-        timestamp: l.created_at || '',
-        source: l.source || ''
-      })));
-      return;
+      if (lastErr) {
+        // Tenta fallback direto
+        const direct = await fetchLeadsDirectFromSupabase();
+        if (direct && direct.length) {
+          setLeads(direct);
+          setEndpointDiagnostics(d => [...d, { url: 'direct-supabase', ok: true }]);
+          lastErr = null;
+        }
+      }
+      if (lastErr) throw lastErr;
+    } catch (err: any) {
+      console.error('fetchLeads error', err);
+      setError(`Erro ao buscar leads: ${err?.message || 'desconhecido'}`);
+    } finally {
+      setLoading(false);
     }
+  };
 
-    // Production/Vercel: call serverless proxy (keeps ADMIN_TOKEN server-only)
-    const proxyRes = await fetch('/api/get-leads', { method: 'GET' });
-    if (!proxyRes.ok) {
-      const txt = await proxyRes.text();
-      throw new Error(`${proxyRes.status} ${txt}`);
+  const hubspotSyncUrlCandidates = () => {
+    const v = import.meta.env.VITE_HUBSPOT_SYNC_URL as string | undefined; // pode ser uma Edge Function / serverless
+    const arr: string[] = [];
+    if (v) arr.push(v);
+    arr.push('/api/hubspot-sync');
+    arr.push('/.netlify/functions/hubspot-sync');
+    return arr;
+  };
+
+  const attemptFetch = async (urls: string[], body: any) => {
+    let lastErr: any = null;
+    for (const url of urls) {
+      try {
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+        if (!res.ok) {
+          const txt = await res.text();
+            throw new Error(`${res.status} ${txt}`);
+        }
+        return await res.json();
+      } catch (e) {
+        lastErr = e;
+        continue;
+      }
     }
-    const proxyJson = await proxyRes.json();
-    setLeads((proxyJson.leads || []).map((l: any) => ({
-      id: l.id,
-      name: l.name || '',
-      email: l.email || '',
-      phone: l.phone || '',
-      message: l.message || '',
-      whatsappConsent: !!l.whatsapp_consent,
-      timestamp: l.created_at || '',
-      source: l.source || ''
-    })));
-  } catch (err: any) {
-    console.error('fetchLeads error', err);
-    setError(err.message || 'Erro ao buscar leads');
-  } finally {
-    setLoading(false);
-  }
-};
-// ...existing code...
+    throw lastErr || new Error('Todas tentativas falharam');
+  };
+
+  const updateLeadState = (id: string, patch: Partial<Lead>) => {
+    setLeads(prev => prev.map(l => l.id === id ? { ...l, ...patch } : l));
+  };
+
+  const syncLeadWithHubSpot = async (lead: Lead) => {
+    if (syncingIds[lead.id]) return;
+    setSyncingIds(prev => ({ ...prev, [lead.id]: true }));
+    updateLeadState(lead.id, { hubspotSyncStatus: 'pending', hubspotSyncError: null });
+    try {
+      const result = await attemptFetch(hubspotSyncUrlCandidates(), { lead });
+      updateLeadState(lead.id, { hubspotSyncStatus: 'synced', hubspotId: result?.hubspotId || result?.id || null });
+    } catch (e: any) {
+      console.error('HubSpot sync lead error', e);
+      updateLeadState(lead.id, { hubspotSyncStatus: 'error', hubspotSyncError: e?.message || 'Erro' });
+    } finally {
+      setSyncingIds(prev => ({ ...prev, [lead.id]: false }));
+    }
+  };
+
+  const syncAllPending = async () => {
+    setSyncingAll(true);
+    const pending = leads.filter(l => l.hubspotSyncStatus !== 'synced');
+    for (const l of pending) {
+      // eslint-disable-next-line no-await-in-loop
+      await syncLeadWithHubSpot(l);
+    }
+    setSyncingAll(false);
+  };
 
   const filteredLeads = leads.filter(lead =>
     lead.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -102,7 +218,7 @@ const fetchLeads = async () => {
 
   const exportLeads = () => {
     const csvContent = [
-      ['Nome', 'Email', 'Telefone', 'Mensagem', 'WhatsApp Consent', 'Data', 'Origem'].join(','),
+      ['Nome', 'Email', 'Telefone', 'Mensagem', 'WhatsApp Consent', 'Data', 'Origem', 'HubSpotID', 'Status HubSpot'].join(','),
       ...filteredLeads.map(lead => [
         `"${lead.name}"`,
         `"${lead.email}"`,
@@ -110,7 +226,9 @@ const fetchLeads = async () => {
         `"${lead.message.replace(/"/g, '""')}"`,
         lead.whatsappConsent ? 'Sim' : 'Não',
         `"${new Date(lead.timestamp).toLocaleString('pt-BR')}"`,
-        `"${lead.source}"`
+        `"${lead.source}"`,
+        `"${lead.hubspotId || ''}"`,
+        `"${lead.hubspotSyncStatus || ''}"`
       ].join(','))
     ].join('\n');
 
@@ -128,18 +246,53 @@ const fetchLeads = async () => {
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
+        {/* Override Endpoint Config */}
+        <div className="mb-4 p-3 rounded border bg-white flex flex-col gap-2">
+          <div className="flex flex-col sm:flex-row gap-2 items-start sm:items-end">
+            <div className="flex-1 w-full">
+              <label className="text-xs font-medium text-gray-600">Override Endpoint (VITE_LEADS_ENDPOINT_OVERRIDE)</label>
+              <Input placeholder="https://..." value={overrideEndpoint} onChange={e => setOverrideEndpoint(e.target.value)} />
+            </div>
+            <Button variant="outline" onClick={fetchLeads}>Aplicar / Reload</Button>
+          </div>
+          {endpointDiagnostics.length > 0 && (
+            <div className="text-xs text-gray-600 flex flex-col gap-1 max-h-40 overflow-auto">
+              {endpointDiagnostics.map((d,i) => (
+                <div key={i} className={d.ok ? 'text-green-600' : 'text-red-600'}>
+                  {d.ok ? 'OK' : 'FAIL'} - {d.url} {d.error ? '→ ' + d.error : ''}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Back Button & Header */}
+        <div className="mb-4 flex items-center gap-3 flex-wrap">
+          <Button variant="outline" onClick={() => window.location.href = '/'} className="flex items-center gap-2">
+            <ArrowLeft className="h-4 w-4" /> Voltar
+          </Button>
+          <Button variant="outline" onClick={fetchLeads} className="flex items-center gap-2">
+            <RefreshCcw className="h-4 w-4" /> Recarregar
+          </Button>
+          <Button variant="outline" disabled={syncingAll || leads.length === 0} onClick={syncAllPending} className="flex items-center gap-2">
+            <CloudUpload className="h-4 w-4" /> {syncingAll ? 'Sincronizando...' : 'Sincronizar Pendentes'}
+          </Button>
+          <div className="text-xs text-gray-500">
+            HubSpot Sync URL(s): {hubspotSyncUrlCandidates().join(' | ')}
+          </div>
+        </div>
+        {/* Header Info */}
         <div className="mb-8">
           <h1 className="text-3xl font-serif text-gray-800 mb-2">
             Dashboard Administrativo - Claris Casa & Clube
           </h1>
           <p className="text-gray-600">
-            Gerencie os leads e contatos da landing page
+            Gerencie os leads e contatos da landing page (Supabase + HubSpot)
           </p>
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total de Leads</CardTitle>
@@ -199,6 +352,19 @@ const fetchLeads = async () => {
               </p>
             </CardContent>
           </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">HubSpot Synced</CardTitle>
+              <CloudUpload className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{leads.filter(l => l.hubspotSyncStatus === 'synced').length}</div>
+              <p className="text-xs text-muted-foreground">
+                Contatos enviados
+              </p>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Filters and Actions */}
@@ -244,7 +410,7 @@ const fetchLeads = async () => {
             <CardHeader>
               <CardTitle>Leads Recebidos ({filteredLeads.length})</CardTitle>
               <CardDescription>
-                Lista de todos os contatos recebidos através da landing page
+                Lista de todos os contatos recebidos e status de sincronização HubSpot
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -264,6 +430,7 @@ const fetchLeads = async () => {
                         <th className="text-left py-3 px-2 font-medium">Contato</th>
                         <th className="text-left py-3 px-2 font-medium">Data</th>
                         <th className="text-left py-3 px-2 font-medium">WhatsApp</th>
+                        <th className="text-left py-3 px-2 font-medium">HubSpot</th>
                         <th className="text-left py-3 px-2 font-medium">Ações</th>
                       </tr>
                     </thead>
@@ -300,7 +467,21 @@ const fetchLeads = async () => {
                             </Badge>
                           </td>
                           <td className="py-3 px-2">
-                            <div className="flex gap-2">
+                            {lead.hubspotSyncStatus === 'synced' && (
+                              <Badge variant="default">OK {lead.hubspotId ? `#${lead.hubspotId}` : ''}</Badge>
+                            )}
+                            {lead.hubspotSyncStatus === 'pending' && (
+                              <Badge variant="secondary">Pendente</Badge>
+                            )}
+                            {lead.hubspotSyncStatus === 'error' && (
+                              <Badge variant="destructive">Erro</Badge>
+                            )}
+                            {lead.hubspotSyncError && (
+                              <div className="text-xs text-red-500 max-w-[140px] truncate" title={lead.hubspotSyncError}>{lead.hubspotSyncError}</div>
+                            )}
+                          </td>
+                          <td className="py-3 px-2">
+                            <div className="flex gap-2 flex-wrap">
                               <Button
                                 size="sm"
                                 variant="outline"
@@ -321,6 +502,15 @@ const fetchLeads = async () => {
                                 onClick={() => window.open(`mailto:${lead.email}`, '_blank')}
                               >
                                 <Mail className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                disabled={syncingIds[lead.id] || lead.hubspotSyncStatus === 'synced'}
+                                onClick={() => syncLeadWithHubSpot(lead)}
+                              >
+                                <CloudUpload className="h-4 w-4 mr-1" />
+                                {syncingIds[lead.id] ? '...' : lead.hubspotSyncStatus === 'synced' ? 'Synced' : 'Sync'}
                               </Button>
                             </div>
                           </td>
@@ -375,10 +565,25 @@ const fetchLeads = async () => {
                   </p>
                 </div>
 
+                <div>
+                  <label className="text-sm font-medium text-gray-600">Status HubSpot</label>
+                  <p>
+                    <Badge variant={selectedLead.hubspotSyncStatus === 'synced' ? 'default' : selectedLead.hubspotSyncStatus === 'error' ? 'destructive' : 'secondary'}>
+                      {selectedLead.hubspotSyncStatus || 'Pendente'}
+                    </Badge>
+                  </p>
+                  {selectedLead.hubspotId && (
+                    <p className="text-xs text-gray-500 mt-1">ID: {selectedLead.hubspotId}</p>
+                  )}
+                  {selectedLead.hubspotSyncError && (
+                    <p className="text-xs text-red-500 mt-1">Erro: {selectedLead.hubspotSyncError}</p>
+                  )}
+                </div>
+
                 {selectedLead.message && (
                   <div>
                     <label className="text-sm font-medium text-gray-600">Mensagem</label>
-                    <p className="bg-gray-50 p-3 rounded-lg">{selectedLead.message}</p>
+                    <p className="bg-gray-50 p-3 rounded-lg whitespace-pre-wrap">{selectedLead.message}</p>
                   </div>
                 )}
 
@@ -387,25 +592,20 @@ const fetchLeads = async () => {
                   <p>{selectedLead.source}</p>
                 </div>
 
-                <div className="flex gap-2 pt-4">
-                  <Button
-                    onClick={() => window.open(`https://wa.me/55${selectedLead.phone.replace(/\D/g, '')}`, '_blank')}
-                    className="bg-green-600 hover:bg-green-700"
-                  >
+                <div className="flex gap-2 pt-4 flex-wrap">
+                  <Button onClick={() => window.open(`https://wa.me/55${selectedLead.phone.replace(/\D/g, '')}`, '_blank')} className="bg-green-600 hover:bg-green-700">
                     <Phone className="h-4 w-4 mr-2" />
                     WhatsApp
                   </Button>
-                  <Button
-                    onClick={() => window.open(`mailto:${selectedLead.email}`, '_blank')}
-                    variant="outline"
-                  >
+                  <Button onClick={() => window.open(`mailto:${selectedLead.email}`, '_blank')} variant="outline">
                     <Mail className="h-4 w-4 mr-2" />
                     Email
                   </Button>
-                  <Button
-                    onClick={() => setSelectedLead(null)}
-                    variant="outline"
-                  >
+                  <Button variant="outline" disabled={!!syncingIds[selectedLead.id] || selectedLead.hubspotSyncStatus === 'synced'} onClick={() => syncLeadWithHubSpot(selectedLead)}>
+                    <CloudUpload className="h-4 w-4 mr-2" />
+                    {syncingIds[selectedLead.id] ? 'Sincronizando...' : selectedLead.hubspotSyncStatus === 'synced' ? 'Já sincronizado' : 'Sincronizar HubSpot'}
+                  </Button>
+                  <Button onClick={() => setSelectedLead(null)} variant="outline">
                     Fechar
                   </Button>
                 </div>
