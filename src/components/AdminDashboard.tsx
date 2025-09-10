@@ -30,6 +30,8 @@ export function AdminDashboard() {
   const [syncingIds, setSyncingIds] = useState<Record<string, boolean>>({});
   const [endpointDiagnostics, setEndpointDiagnostics] = useState<{ url: string; ok: boolean; error?: string }[]>([]);
   const [overrideEndpoint, setOverrideEndpoint] = useState<string>(import.meta.env.VITE_LEADS_ENDPOINT_OVERRIDE || '');
+  const adminToken = import.meta.env.VITE_SUPABASE_ADMIN_TOKEN || '';
+  const [authError, setAuthError] = useState(false);
   let supabaseRef: SupabaseClient | null = null;
 
   // Load leads from Supabase
@@ -41,11 +43,15 @@ export function AdminDashboard() {
     const list: string[] = [];
     if (overrideEndpoint) list.push(overrideEndpoint.trim());
     const fnUrl = import.meta.env.VITE_SUPABASE_FETCH_LEADS_FUNCTION_URL as string | undefined;
-    if (fnUrl) list.push(fnUrl);
-    list.push('/api/get-leads');
-    list.push('/.netlify/functions/get-leads');
-    list.push('/api/functions/get-leads');
-    // Remove duplicados mantendo ordem
+    if (fnUrl) {
+      list.push(fnUrl); // se function configurada, não tentamos outros para evitar 404/401 desnecessários
+    } else {
+      list.push('/api/get-leads');
+      if (import.meta.env.PROD) {
+        list.push('/.netlify/functions/get-leads');
+        list.push('/api/functions/get-leads');
+      }
+    }
     return Array.from(new Set(list.filter(Boolean)));
   };
 
@@ -81,10 +87,10 @@ export function AdminDashboard() {
   const fetchLeads = async () => {
     setLoading(true);
     setError('');
+    setAuthError(false);
     setEndpointDiagnostics([]);
     try {
       const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
-      const adminToken = import.meta.env.VITE_SUPABASE_ADMIN_TOKEN as string | undefined;
       const urls = resolveFetchLeadsUrls();
       let lastErr: any = null;
       for (const url of urls) {
@@ -96,11 +102,17 @@ export function AdminDashboard() {
             headers['Authorization'] = `Bearer ${anonKey}`;
           }
           const res = await fetch(url, { method: 'GET', headers, credentials: 'omit' });
+          const status = res.status;
           const contentType = res.headers.get('content-type') || '';
           if (!res.ok) {
             const preview = await res.text();
-            const errMsg = `HTTP ${res.status} ${url} corpo: ${preview.slice(0,100)}`;
+            const errMsg = `HTTP ${status} ${url} corpo: ${preview.slice(0,100)}`;
             setEndpointDiagnostics(d => [...d, { url, ok: false, error: errMsg }]);
+            if (status === 401) {
+              setAuthError(true);
+              // 401: não continua testando outros se a function principal falhou (primeira URL)
+              if (url === urls[0]) break;
+            }
             throw new Error(errMsg);
           }
           if (!contentType.includes('application/json')) {
@@ -132,8 +144,7 @@ export function AdminDashboard() {
           continue;
         }
       }
-      if (lastErr) {
-        // Tenta fallback direto
+      if (lastErr && !authError) {
         const direct = await fetchLeadsDirectFromSupabase();
         if (direct && direct.length) {
           setLeads(direct);
@@ -141,10 +152,9 @@ export function AdminDashboard() {
           lastErr = null;
         }
       }
-      if (lastErr) throw lastErr;
+      if (lastErr && !authError) throw lastErr;
     } catch (err: any) {
-      console.error('fetchLeads error', err);
-      setError(`Erro ao buscar leads: ${err?.message || 'desconhecido'}`);
+      if (!authError) setError(`Erro ao buscar leads: ${err?.message || 'desconhecido'}`);
     } finally {
       setLoading(false);
     }
@@ -246,6 +256,21 @@ export function AdminDashboard() {
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
+        {/* Avisos de configuração */}
+        {authError && (
+          <div className="mb-4 p-3 rounded border border-red-300 bg-red-50 text-xs text-red-700">
+            401 Unauthorized: verifique se ADMIN_TOKEN na Edge Function coincide com VITE_SUPABASE_ADMIN_TOKEN (build) e se a variável está exposta no ambiente de produção.
+          </div>
+        )}
+        {!authError && !adminToken && (
+          <div className="mb-4 p-3 rounded border border-amber-300 bg-amber-50 text-xs text-amber-700">
+            VITE_SUPABASE_ADMIN_TOKEN não definido no frontend. Se a função exigir token irá retornar 401.
+          </div>
+        )}
+        <div className="mb-2 text-[11px] font-mono text-gray-500">
+          Envio de header x-admin-token: {adminToken ? 'SIM' : 'NÃO'} {adminToken && `(len=${adminToken.length})`}
+        </div>
+
         {/* Override Endpoint Config */}
         <div className="mb-4 p-3 rounded border bg-white flex flex-col gap-2">
           <div className="flex flex-col sm:flex-row gap-2 items-start sm:items-end">
@@ -415,11 +440,9 @@ export function AdminDashboard() {
             </CardHeader>
             <CardContent>
               {filteredLeads.length === 0 ? (
-                <div className="text-center py-8">
-                  <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-600">
-                    {searchTerm ? 'Nenhum lead encontrado para sua busca' : 'Nenhum lead recebido ainda'}
-                  </p>
+                <div className="text-center py-16 border-2 border-dashed rounded-lg bg-white">
+                  <Users className="h-10 w-10 text-gray-300 mx-auto mb-4" />
+                  <p className="text-gray-500">Nenhum lead recebido ainda.</p>
                 </div>
               ) : (
                 <div className="overflow-x-auto">
