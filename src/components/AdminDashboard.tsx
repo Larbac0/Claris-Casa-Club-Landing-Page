@@ -45,12 +45,18 @@ export function AdminDashboard() {
     fetchLeads();
   }, []);
 
+  // ...existing code...
   const resolveFetchLeadsUrls = () => {
     const list: string[] = [];
     const fnUrl = import.meta.env.VITE_SUPABASE_FETCH_LEADS_FUNCTION_URL as string | undefined;
+    // Se NÃO temos admin token local, prioriza proxy serverless
+    if (!adminTokenLocal) {
+      list.push('/api/get-leads');
+    }
     if (fnUrl) {
-      list.push(fnUrl); // se function configurada, não tentamos outros para evitar 404/401 desnecessários
+      list.push(fnUrl);
     } else {
+      // Fallbacks (caso haja outros provedores)
       list.push('/api/get-leads');
       if (import.meta.env.PROD) {
         list.push('/.netlify/functions/get-leads');
@@ -59,6 +65,7 @@ export function AdminDashboard() {
     }
     return Array.from(new Set(list.filter(Boolean)));
   };
+// ...existing code...
 
   const mapLeads = (arr: any[]): Lead[] => (arr || []).map((l: any) => ({
     id: l.id,
