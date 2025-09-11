@@ -65,7 +65,12 @@ export function AdminDashboard() {
     }
     return Array.from(new Set(list.filter(Boolean)));
   };
-// ...existing code...
+
+  {adminTokenLocal || import.meta.env.VITE_SUPABASE_FETCH_LEADS_FUNCTION_URL ? (
+    <div className="mb-4 p-3 rounded border bg-white flex flex-col gap-2">
+      {/* bloco override permanece */}
+    </div>
+  ) : null}
 
   const mapLeads = (arr: any[]): Lead[] => (arr || []).map((l: any) => ({
     id: l.id,
