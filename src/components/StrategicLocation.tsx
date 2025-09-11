@@ -57,16 +57,16 @@ export function StrategicLocation() {
   };
 
   return (
-    <section className="py-20 bg-gray-50">
+    <section className="py-10 bg-gray-50">
       <div className="container mx-auto px-6">
         {/* Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-8">
           <motion.h2
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-5xl text-gray-800 mb-6 font-serif"
+            className="text-3xl md:text-4xl text-gray-800 mb-5 font-serif"
           >
             Localização <span className="text-[#D4AF37]">Estratégica</span>
           </motion.h2>
@@ -75,24 +75,24 @@ export function StrategicLocation() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: true }}
-            className="text-xl text-gray-600 max-w-3xl mx-auto"
+            className="text-lg text-gray-600 max-w-3xl mx-auto"
           >
             No coração da Barra da Tijuca, com acesso privilegiado a tudo o que você precisa
           </motion.p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
           {/* Google Maps Column */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="relative"
+            className="relative self-center"
           >
             {/* Interactive Google Map */}
-            <div className="relative bg-white rounded-3xl shadow-2xl p-4 border border-gray-100">
-              <div className="aspect-square relative overflow-hidden rounded-2xl">
+            <div className="relative bg-white rounded-3xl shadow-2xl p-2 border border-gray-100">
+              <div className="aspect-[16/11] relative overflow-hidden rounded-2xl">
                 {/* Loading Placeholder */}
                 {!mapLoaded && (
                   <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-green-50 flex items-center justify-center">
@@ -126,14 +126,14 @@ export function StrategicLocation() {
                 </div>
 
                 {/* Interactive Map Button */}
-                <div className="absolute bottom-4 right-4">
+                <div className="absolute bottom-3 right-3">
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={openInGoogleMaps}
-                    className="bg-[#D4AF37] hover:bg-[#B8941F] text-black px-4 py-2 rounded-full font-medium text-sm shadow-lg flex items-center gap-2 transition-colors duration-300"
+                    className="bg-[#D4AF37] hover:bg-[#B8941F] text-black px-2.5 py-1 rounded-full font-medium text-[11px] shadow-lg flex items-center gap-1.5 transition-colors duration-300"
                   >
-                    <ExternalLink className="w-4 h-4" />
+                    <ExternalLink className="w-3 h-3" />
                     Abrir no Maps
                   </motion.button>
                 </div>
@@ -150,6 +150,45 @@ export function StrategicLocation() {
                 </div>
               </div>
             </div>
+
+            {/* CTA Section moved below the map */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              viewport={{ once: true }}
+              className="mt-6 p-6 bg-gradient-to-r from-[#D4AF37]/10 to-[#B8941F]/10 rounded-2xl border border-[#D4AF37]/20"
+            >
+              <div className="text-center">
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                  Viva onde tudo acontece
+                </h3>
+                <p className="text-gray-600 mb-4">
+                  A localização perfeita para quem busca praticidade, 
+                  qualidade de vida e valorização imobiliária.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  <button
+                    onClick={openInGoogleMaps}
+                    className="bg-[#D4AF37] hover:bg-[#B8941F] text-black px-6 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 shadow-lg flex items-center justify-center gap-2"
+                  >
+                    <Navigation className="w-4 h-4" />
+                    Rotas no Google Maps
+                  </button>
+                  <button
+                    onClick={() => {
+                      const formElement = document.getElementById('contact-form');
+                      if (formElement) {
+                        formElement.scrollIntoView({ behavior: 'smooth' });
+                      }
+                    }}
+                    className="bg-[#D4AF37] hover:bg-[#B8941F] text-black px-6 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 shadow-lg"
+                  >
+                    Agendar Visita
+                  </button>
+                </div>
+              </div>
+            </motion.div>
 
             {/* Floating Address Card */}
           </motion.div>
@@ -193,45 +232,6 @@ export function StrategicLocation() {
                 </motion.div>
               ))}
             </div>
-
-            {/* CTA Section */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.8 }}
-              viewport={{ once: true }}
-              className="mt-8 p-6 bg-gradient-to-r from-[#D4AF37]/10 to-[#B8941F]/10 rounded-2xl border border-[#D4AF37]/20"
-            >
-              <div className="text-center">
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                  Viva onde tudo acontece
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  A localização perfeita para quem busca praticidade, 
-                  qualidade de vida e valorização imobiliária.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                  <button
-                    onClick={openInGoogleMaps}
-                    className="bg-[#D4AF37] hover:bg-[#B8941F] text-black px-6 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 shadow-lg flex items-center justify-center gap-2"
-                  >
-                    <Navigation className="w-4 h-4" />
-                    Rotas no Google Maps
-                  </button>
-                  <button
-                    onClick={() => {
-                      const formElement = document.getElementById('contact-form');
-                      if (formElement) {
-                        formElement.scrollIntoView({ behavior: 'smooth' });
-                      }
-                    }}
-                    className="bg-white hover:bg-gray-50 text-[#D4AF37] border-2 border-[#D4AF37] px-6 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 shadow-lg"
-                  >
-                    Agendar Visita
-                  </button>
-                </div>
-              </div>
-            </motion.div>
           </motion.div>
         </div>
       </div>

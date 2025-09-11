@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Shield, Wifi, Zap, Car, Waves, Truck, Users, Sparkles } from 'lucide-react';
+import { Shield, Wifi, Zap, Car, Waves, Truck, Users, Sparkles, Home, TreePine } from 'lucide-react';
 
 export function ClarisExclusives() {
   const exclusives = [
@@ -36,6 +36,16 @@ export function ClarisExclusives() {
       color: "from-[#D4AF37] to-[#B8941F]",
       features: [
         {
+          icon: Home,
+          title: "Casas de 318 m² a 580 m²",
+          description: "Arquitetura moderna com espaços generosos."
+        },
+        {
+          icon: TreePine,
+          title: "Jardins Privativos",
+          description: " Opções com gardens de 40 até 250 m²."
+        },
+        {
           icon: Truck,
           title: "Espaço Delivery Premium",
           description: "Recebimento de encomendas com total conveniência e segurança"
@@ -71,7 +81,12 @@ export function ClarisExclusives() {
           icon: Waves,
           title: "Balsa Privativa",
           description: "Travessia direta e exclusiva para a praia com total comodidade"
-        }
+        },
+        {
+          icon: Car,
+          title: "Garagem Subterrânea Privativa",
+          description: "Garagem para 3 veículos + bicicletário + pranchário. Sala de repouso com tanque, geladeira e TV Segurança, funcionalidade e conforto — tudo no mesmo espaço"
+        },
       ]
     }
   ];
@@ -168,18 +183,6 @@ export function ClarisExclusives() {
           viewport={{ once: true }}
           className="mt-20 text-center"
         >
-          <div className="bg-gradient-to-r from-[#D4AF37]/10 to-[#B8941F]/10 rounded-3xl p-8 md:p-12 border border-[#D4AF37]/20 backdrop-blur-sm">
-            <div className="max-w-4xl mx-auto">
-              <h3 className="text-2xl md:text-3xl font-serif text-gray-800 mb-6">
-                Um Novo Conceito de <span className="text-[#D4AF37]">Viver com Exclusividade</span>
-              </h3>
-              <p className="text-lg text-gray-600 leading-relaxed mb-8">
-                No Claris Casa & Clube, cada detalhe foi pensado para proporcionar uma experiência única de moradia. 
-                Combinamos tecnologia de ponta, comodidades excepcionais e localização privilegiada para criar 
-                o ambiente perfeito para quem busca o melhor da vida na Barra da Tijuca.
-              </p>
-            </div>
-          </div>
         </motion.div>
       </div>
     </section>

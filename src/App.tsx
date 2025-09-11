@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { HeroSection } from "./components/HeroSection";
 import { ClarisExclusives } from "./components/ClarisExclusives";
 import { InstitutionalVideo } from "./components/InstitutionalVideo";
-import { WhyClaris } from "./components/WhyClaris";
 import { VisualTour } from "./components/VisualTour";
 import { ExclusiveServices } from "./components/ExclusiveServices";
 import { StrategicLocation } from "./components/StrategicLocation";
@@ -37,9 +36,8 @@ export default function App() {
       <HeroSection />
       <PartnerDisclaimer />
       <InstitutionalVideo />
-      <WhyClaris />
-      <VisualTour />
       <ClarisExclusives />
+      <VisualTour />
       <ExclusiveServices />
       <StrategicLocation />
       <FinalCTA />

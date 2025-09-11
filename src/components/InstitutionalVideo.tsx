@@ -44,35 +44,37 @@ export function InstitutionalVideo() {
             className="relative group"
           >
             {/* Video Thumbnail */}
-            <div className="relative rounded-3xl overflow-hidden shadow-2xl">
-              <ImageWithFallback
-                src="/img/Consultoria personalizada.jpeg"
-                alt="Claris Casa & Clube - Vídeo Institucional"
-                className="w-full h-80 md:h-96 object-cover"
-              />
-              
-              {/* Overlay */}
-              <div className="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition-all duration-300"></div>
-              
-              {/* Play Button */}
-              <motion.div
-                initial={{ scale: 0 }}
-                whileInView={{ scale: 1 }}
-                transition={{ type: "spring", stiffness: 300, damping: 20, delay: 0.3 }}
-                viewport={{ once: true }}
-                className="absolute inset-0 flex items-center justify-center"
-              >
-                <Button
-                  onClick={() => setShowVideo(true)}
-                  className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-[#D4AF37] hover:bg-[#B8941F] text-black shadow-2xl hover:shadow-[#D4AF37]/25 transition-all duration-300 group-hover:scale-110"
+            <div className="w-full max-w-[30rem] mx-auto">
+              <div className="relative aspect-square rounded-3xl overflow-hidden shadow-2xl">
+                <ImageWithFallback
+                  src="/img/Consultoria personalizada.jpeg"
+                  alt="Claris Casa & Clube - Vídeo Institucional"
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                
+                {/* Overlay */}
+                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition-all duration-300"></div>
+                
+                {/* Play Button */}
+                <motion.div
+                  initial={{ scale: 0 }}
+                  whileInView={{ scale: 1 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20, delay: 0.3 }}
+                  viewport={{ once: true }}
+                  className="absolute inset-0 flex items-center justify-center"
                 >
-                  <Play className="w-10 h-10 md:w-12 md:h-12 ml-1" />
-                </Button>
-              </motion.div>
+                  <Button
+                    onClick={() => setShowVideo(true)}
+                    className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-[#D4AF37] hover:bg-[#B8941F] text-black shadow-2xl hover:shadow-[#D4AF37]/25 transition-all duration-300 group-hover:scale-110"
+                  >
+                    <Play className="w-8 h-8 md:w-10 md:h-10 ml-1" />
+                  </Button>
+                </motion.div>
 
-              {/* Duration Badge */}
-              <div className="absolute bottom-4 right-4 bg-black/80 text-white px-3 py-1 rounded-full">
-                <span className="text-sm">0:47</span>
+                {/* Duration Badge */}
+                <div className="absolute bottom-4 right-4 bg-black/80 text-white px-3 py-1 rounded-full">
+                  <span className="text-sm">0:47</span>
+                </div>
               </div>
             </div>
 

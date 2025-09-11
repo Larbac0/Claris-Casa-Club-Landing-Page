@@ -8,6 +8,7 @@ import {
   Camera,
 } from "lucide-react";
 import { ImageWithFallback } from "./ui/ImageWithFallback";
+import type React from "react";
 
 interface GalleryImage {
   src: string;
@@ -154,7 +155,6 @@ export function VisualTour() {
   const [currentImageIndex, setCurrentImageIndex] = useState<{
     [key: string]: number;
   }>({});
-  const [sliderPosition, setSliderPosition] = useState(50);
 
   // Get current image for each section
   const getCurrentImage = (sectionIndex: number) => {
@@ -303,10 +303,17 @@ export function VisualTour() {
     }
   };
 
+  const goToFinalCTA = () => {
+    const target = document.getElementById('final-cta') || document.getElementById('FinalCTA');
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
-    <section className="py-20 bg-gray-50">
+    <section className="py-12 bg-gray-50">
       <div className="container mx-auto px-6">
-        <div className="text-center mb-16">
+        <div className="text-center mb-12">
           <motion.h2
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -347,93 +354,94 @@ export function VisualTour() {
                 whileHover={{ scale: 1.05 }}
                 className="relative group cursor-pointer overflow-hidden rounded-2xl shadow-lg"
               >
-                <ImageWithFallback
-                  src={currentImage.src}
-                  alt={currentImage.alt}
-                  className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-110"
-                />
+                <div className="relative w-full aspect-[20/8]">
+                  <ImageWithFallback
+                    src={currentImage.src}
+                    alt={currentImage.alt}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                  />
 
-                {/* Image counter indicator */}
-                {hasMultipleImages && (
-                  <div className="absolute top-4 right-4 bg-black/70 text-white px-2 py-1 rounded-full text-xs flex items-center gap-1">
-                    <Camera className="w-3 h-3" />
-                    <span>
-                      {(currentImageIndex[section.id] || 0) + 1}
-                      /{section.images.length}
-                    </span>
-                  </div>
-                )}
+                  {/* Image counter indicator */}
+                  {hasMultipleImages && (
+                    <div className="absolute top-4 right-4 bg-black/70 text-white px-2 py-1 rounded-full text-xs flex items-center gap-1">
+                      <Camera className="w-3 h-3" />
+                      <span>
+                        {(currentImageIndex[section.id] || 0) + 1}
+                        /{section.images.length}
+                      </span>
+                    </div>
+                  )}
 
-                {/* Navigation dots for multiple images */}
-                {hasMultipleImages && (
-                  <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    {section.images.map((_, imgIndex) => (
+                  {/* Navigation dots for multiple images */}
+                  {hasMultipleImages && (
+                    <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      {section.images.map((_, imgIndex) => (
+                        <button
+                          key={imgIndex}
+                          onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                            e.stopPropagation();
+                            setCurrentImageIndex((prev) => ({
+                              ...prev,
+                              [section.id]: imgIndex,
+                            }));
+                          }}
+                          className={`w-2 h-2 rounded-full transition-all duration-200 ${
+                            (currentImageIndex[section.id] || 0) === imgIndex
+                              ? "bg-[#D4AF37] w-4"
+                              : "bg-white/50"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Section navigation arrows */}
+                  {hasMultipleImages && (
+                    <>
                       <button
-                        key={imgIndex}
                         onClick={(e) => {
                           e.stopPropagation();
-                          setCurrentImageIndex((prev) => ({
-                            ...prev,
-                            [section.id]: imgIndex,
-                          }));
+                          prevImageInSection(sectionIndex);
                         }}
-                        className={`w-2 h-2 rounded-full transition-all duration-200 ${
-                          (currentImageIndex[section.id] ||
-                            0) === imgIndex
-                            ? "bg-[#D4AF37] w-4"
-                            : "bg-white/50"
-                        }`}
-                      />
-                    ))}
+                        className="absolute left-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-black/50 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-black/70"
+                      >
+                        <ChevronLeft className="w-4 h-4" />
+                      </button>
+
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          nextImageInSection(sectionIndex);
+                        }}
+                        className="absolute right-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-black/50 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-black/70"
+                      >
+                        <ChevronRight className="w-4 h-4" />
+                      </button>
+                    </>
+                  )}
+
+                  {/* Section info overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="absolute bottom-4 left-4 text-white">
+                      <h3 className="text-lg font-semibold">
+                        {section.title}
+                      </h3>
+                      <p className="text-sm opacity-90">
+                        {section.description}
+                      </p>
+                    </div>
                   </div>
-                )}
 
-                {/* Section navigation arrows */}
-                {hasMultipleImages && (
-                  <>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        prevImageInSection(sectionIndex);
-                      }}
-                      className="absolute left-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-black/50 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-black/70"
-                    >
-                      <ChevronLeft className="w-4 h-4" />
-                    </button>
-
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        nextImageInSection(sectionIndex);
-                      }}
-                      className="absolute right-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-black/50 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-black/70"
-                    >
-                      <ChevronRight className="w-4 h-4" />
-                    </button>
-                  </>
-                )}
-
-                {/* Section info overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="absolute bottom-4 left-4 text-white">
-                    <h3 className="text-lg font-semibold">
-                      {section.title}
-                    </h3>
-                    <p className="text-sm opacity-90">
-                      {section.description}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Play button overlay */}
-                <div
-                  className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
-                  onClick={() =>
-                    handleSectionClick(sectionIndex)
-                  }
-                >
-                  <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
-                    <Play className="w-6 h-6 text-white ml-1" />
+                  {/* Play button overlay */}
+                  <div
+                    className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
+                    onClick={() =>
+                      handleSectionClick(sectionIndex)
+                    }
+                  >
+                    <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+                      <Play className="w-6 h-6 text-white ml-1" />
+                    </div>
                   </div>
                 </div>
               </motion.div>
@@ -441,79 +449,15 @@ export function VisualTour() {
           })}
         </div>
 
-        {/* Before/After Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="bg-white rounded-3xl p-8 shadow-lg"
-        >
-          <div className="text-center mb-8">
-            <h3 className="text-3xl text-gray-800 mb-4 font-serif">
-              Antes & Depois
-            </h3>
-            <p className="text-lg text-gray-600">
-              Veja a transformação do terreno em um
-              empreendimento de luxo
-            </p>
-          </div>
-
-          <div className="relative max-w-4xl mx-auto">
-            <div className="relative overflow-hidden rounded-2xl h-80 md:h-96">
-              {/* Before Image */}
-              <ImageWithFallback
-                src="./img/Entrada_resultado.webp"
-                alt="Antes - Terreno"
-                className="absolute inset-0 w-full h-full object-cover"
-                style={{
-                  clipPath: `inset(0 ${100 - sliderPosition}% 0 0)`,
-                }}
-              />
-
-              {/* After Image */}
-              <ImageWithFallback
-                src="./img/Entrada_resultado_1.webp"
-                alt="Depois - Claris Casa & Clube"
-                className="absolute inset-0 w-full h-full object-cover"
-                style={{
-                  clipPath: `inset(0 0 0 ${sliderPosition}%)`,
-                }}
-              />
-
-              {/* Slider */}
-              <div
-                className="absolute top-0 bottom-0 w-1 bg-white shadow-lg cursor-col-resize z-10"
-                style={{ left: `${sliderPosition}%` }}
-              >
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center">
-                  <div className="w-1 h-4 bg-gray-400 rounded mx-0.5"></div>
-                  <div className="w-1 h-4 bg-gray-400 rounded mx-0.5"></div>
-                </div>
-              </div>
-
-              {/* Labels */}
-              <div className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1 rounded-full text-sm">
-                Antes
-              </div>
-              <div className="absolute top-4 right-4 bg-[#D4AF37] text-black px-3 py-1 rounded-full text-sm font-semibold">
-                Depois
-              </div>
-            </div>
-
-            {/* Slider Input */}
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value={sliderPosition}
-              onChange={(e) =>
-                setSliderPosition(Number(e.target.value))
-              }
-              className="absolute inset-0 w-full h-full opacity-0 cursor-col-resize z-20"
-            />
-          </div>
-        </motion.div>
+        {/* CTA to FinalCTA */}
+        <div className="flex justify-center mb-12">
+          <button
+            onClick={goToFinalCTA}
+            className="bg-[#D4AF37] hover:bg-[#B8941F] text-black px-6 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 shadow-lg"
+          >
+            Agende sua visita e conheça mais detalhes
+          </button>
+        </div>
 
         {/* Lightbox */}
         <AnimatePresence>
