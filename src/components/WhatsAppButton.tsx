@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X } from 'lucide-react';
 import { createLead } from '../lib/leadsApi';
@@ -8,40 +8,40 @@ const WHATSAPP_NUMBER = '5521971875960';
 const WHATSAPP_MESSAGE = 'Olá! Gostaria de agendar uma consultoria privada para conhecer o Claris Casa & Clube. Tenho interesse em explorar as oportunidades disponíveis e entender como este projeto pode se alinhar ao meu estilo de vida.';
 
 
-export function WhatsAppButton() {
+const WhatsAppButtonComponent = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
+  const [tooltipShown, setTooltipShown] = useState(false);
 
   // Show button after user scrolls a bit
   useEffect(() => {
     const handleScroll = () => {
       setIsVisible(window.scrollY > 300);
     };
-
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Show tooltip periodically to draw attention
+  // Show tooltip only once automatically
   useEffect(() => {
-    if (!isVisible) return;
-
-    const showTooltipInterval = setInterval(() => {
-      setShowTooltip(true);
-      setTimeout(() => setShowTooltip(false), 3000);
-    }, 15000); // Show every 15 seconds
-
-    // Show initial tooltip after 2 seconds
+    if (!isVisible || tooltipShown) return;
     const initialTimeout = setTimeout(() => {
       setShowTooltip(true);
-      setTimeout(() => setShowTooltip(false), 3000);
+      setTimeout(() => {
+        setShowTooltip(false);
+        setTooltipShown(true);
+      }, 3000);
     }, 2000);
+    return () => clearTimeout(initialTimeout);
+  }, [isVisible, tooltipShown]);
 
-    return () => {
-      clearInterval(showTooltipInterval);
-      clearTimeout(initialTimeout);
-    };
-  }, [isVisible]);
+  // Show tooltip on hover
+  const handleMouseEnter = () => {
+    setShowTooltip(true);
+  };
+  const handleMouseLeave = () => {
+    setShowTooltip(false);
+  };
 
   const handleWhatsAppClick = () => {
     // Record lead with whatsapp consent (best-effort)
@@ -80,24 +80,23 @@ export function WhatsAppButton() {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-26 right-6 z-50">
+    <div className="fixed bottom-30 right-6 z-50">
       <AnimatePresence>
         {showTooltip && (
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 20 }}
-            className="absolute bottom-16 right-0 mb-2"
+            className="absolute right-20 bottom-1/2 translate-y-1/2 flex items-center"
           >
-              <div className="bg-white rounded-2xl shadow-2xl p-4 max-w-md border border-gray-100 relative">
+            <div className="bg-white rounded-2xl shadow-2xl p-3 w-[400px] border border-gray-100 relative flex items-center min-h-[80px]">
               <button
                 onClick={() => setShowTooltip(false)}
-                className="absolute top-2 right-2 w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
+                className="absolute top-2 right-2 w-10 h-6 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
               >
                 <X className="w-3 h-3 text-gray-600" />
               </button>
-              
-              <div className="pr-6">
+              <div className="pr-7">
                 <h4 className="font-semibold text-gray-800 mb-2">
                   Fale com nosso atendimento exclusivo
                 </h4>
@@ -112,9 +111,8 @@ export function WhatsAppButton() {
                   Fale com o corretor Tegra
                 </button>
               </div>
-              
-              {/* Tooltip arrow */}
-              <div className="absolute bottom-0 right-6 transform translate-y-1/2 rotate-45 w-3 h-3 bg-white border-r border-b border-gray-100"></div>
+              {/* Tooltip arrow horizontal */}
+              <div className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-1/2 rotate-45 w-3 h-3 bg-white border-t border-l border-gray-100"></div>
             </div>
           </motion.div>
         )}
@@ -126,6 +124,8 @@ export function WhatsAppButton() {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         onClick={handleWhatsAppClick}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
         className="relative w-16 h-16 bg-[#25D366] hover:bg-[#1FAD54] rounded-full shadow-2xl flex items-center justify-center transition-colors duration-200 group"
       >
         {/* Pulsing animation */}
@@ -134,10 +134,8 @@ export function WhatsAppButton() {
           transition={{ duration: 2, repeat: Infinity }}
           className="absolute inset-0 bg-[#25D366] rounded-full opacity-30"
         />
-        
         {/* WhatsApp Icon */}
         <MessageCircle className="w-8 h-8 text-white z-10" />
-        
         {/* Notification badge */}
         <motion.div
           animate={{ scale: [1, 1.2, 1] }}
@@ -156,3 +154,5 @@ export function WhatsAppButton() {
     </div>
   );
 }
+
+export const WhatsAppButton = React.memo(WhatsAppButtonComponent);
