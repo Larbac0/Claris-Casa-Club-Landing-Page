@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Send, MessageCircle, ChevronDown, CheckCircle, AlertCircle } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
+import { createClient } from '@supabase/supabase-js';
 
 interface Message {
   id: string;
@@ -35,9 +36,94 @@ export function ChatWidget() {
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [isMinimized, setIsMinimized] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [supabase, setSupabase] = useState<any>(null);
+  const realtimeSubRef = useRef<any>(null);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Initialize Supabase client if env is present
+  useEffect(() => {
+    try {
+      const url = (import.meta.env.VITE_SUPABASE_URL as string) || '';
+      const key = (import.meta.env.VITE_SUPABASE_ANON_KEY as string) || '';
+      if (url && key) setSupabase(createClient(url, key));
+    } catch (e) {
+      console.warn('Supabase init failed', e);
+    }
+  }, []);
+
+  // Subscribe to realtime chat messages for current session
+  useEffect(() => {
+    if (!supabase) return;
+    // cleanup previous
+    if (realtimeSubRef.current) {
+      try { supabase.removeChannel(realtimeSubRef.current); } catch (e) { /* ignore */ }
+      realtimeSubRef.current = null;
+    }
+
+    if (!sessionId) return;
+
+    // subscribe to INSERTs on chat_messages for this session
+    try {
+      const channel = supabase.channel('public:chat_messages')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'chat_messages', filter: `session_id=eq.${sessionId}` }, (payload: any) => {
+          const record = payload?.new;
+          if (!record) return;
+          const msg: Message = {
+            id: String(record.id || Date.now()),
+            type: record.sender === 'agent' ? 'bot' : 'user', // map agent -> bot side bubble left; user stays right
+            content: record.content,
+            timestamp: new Date(record.created_at || record.createdAt || Date.now())
+          };
+          // ensure agent messages appear on left (bot style)
+          setMessages(prev => [...prev, msg]);
+          if (!isOpen) setUnreadCount(prev => prev + 1);
+        })
+        .subscribe();
+
+      realtimeSubRef.current = channel;
+    } catch (e) {
+      // fallback: subscribe to all messages and filter client-side
+      interface SupabaseChatMessage {
+        id: string | number;
+        session_id: string;
+        sender: string;
+        content: string;
+        created_at?: string;
+      }
+
+      interface SupabaseInsertPayload {
+        new: SupabaseChatMessage;
+        [key: string]: any;
+      }
+
+      const sub = supabase
+        .from('chat_messages')
+        .on('INSERT', (payload: SupabaseInsertPayload) => {
+          const rec = payload.new;
+          if (rec.session_id !== sessionId) return;
+          const msg: Message = {
+        id: String(rec.id || Date.now()),
+        type: rec.sender === 'agent' ? 'bot' : 'user',
+        content: rec.content,
+        timestamp: new Date(rec.created_at || Date.now())
+          };
+          setMessages(prev => [...prev, msg]);
+          if (!isOpen) setUnreadCount(prev => prev + 1);
+        })
+        .subscribe();
+      realtimeSubRef.current = sub;
+    }
+
+    return () => {
+      if (!supabase || !realtimeSubRef.current) return;
+      try { supabase.removeChannel(realtimeSubRef.current); } catch (_) {}
+      try { supabase.removeSubscription(realtimeSubRef.current); } catch (_) {}
+      realtimeSubRef.current = null;
+    };
+  }, [supabase, sessionId, isOpen]);
 
   // Scroll to bottom when new messages arrive
   const scrollToBottom = () => {
@@ -100,6 +186,14 @@ export function ChatWidget() {
       content,
       timestamp: new Date()
     }]);
+    // persist to supabase if human session exists
+    if (supabase && sessionId) {
+      try {
+        supabase.from('chat_messages').insert({ session_id: sessionId, sender: 'user', content }).then(() => {});
+      } catch (e) {
+        console.warn('Failed to persist user message', e);
+      }
+    }
   };
 
   const handleSendMessage = () => {
@@ -158,56 +252,62 @@ export function ChatWidget() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
-
+ 
   const submitChatData = async (data: ChatData) => {
     setIsSubmitting(true);
-    
+
     try {
-      // Submit to Supabase backend
-      const baseUrl = `https://pezerzeepjrmzsfpoegi.supabase.co/functions/v1/make-server-17b725d2`;
-      const response = await fetch(`${baseUrl}/chat-submit`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBlemVyemVlcGpybXpzZnBvZWdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2OTY0MjIsImV4cCI6MjA3MDI3MjQyMn0.LY4ju-QBzeOOxG_KZnSm24ut9t_PcuyOoVumQptCBdo`,
-        },
-        body: JSON.stringify(data),
-      });
+      // If Supabase client available, persist lead, session and initial message
+      if (supabase) {
+        // create lead
+        const leadPayload: any = {
+          name: data.name || null,
+          email: data.email || null,
+          phone: data.phone || null,
+          message: data.interest || null,
+          whatsapp_consent: true,
+          source: 'chat-widget'
+        };
 
-      const result = await response.json();
+        const leadRes = await supabase.from('leads').insert(leadPayload).select('*').maybeSingle();
+        const lead = leadRes?.data || null;
 
-      if (response.ok) {
+        // create chat session
+        let createdSession: any = null;
+        if (lead && lead.id) {
+          const sessionRes = await supabase.from('chat_sessions').insert({ lead_id: lead.id }).select('*').maybeSingle();
+          createdSession = sessionRes?.data || null;
+        }
+
+        // insert initial user message into chat_messages
+        if (createdSession) {
+          await supabase.from('chat_messages').insert({ session_id: createdSession.id, sender: 'user', content: data.interest || 'Contato via chat' });
+          setSessionId(createdSession.id);
+          setSubmitStatus('success');
+          addBotMessage(`${data.name}, suas informações foram enviadas com sucesso! 🎯`, 2000);
+          addBotMessage('Um de nossos consultores humanos iniciará a conversa em breve.', 3500);
+        } else {
+          // fallback: still show success to user
+          setSubmitStatus('success');
+          addBotMessage(`${data.name}, suas informações foram enviadas com sucesso! 🎯`, 2000);
+        }
+
+      } else {
+        // fallback behavior if no supabase client
         setSubmitStatus('success');
         addBotMessage(`${data.name}, suas informações foram enviadas com sucesso! 🎯`, 2000);
-        addBotMessage("Nosso consultor entrará em contato pelo WhatsApp em alguns minutos. Enquanto isso, continue explorando nossa landing page!", 4000);
-        
-        // Optional: Close chat after successful submission
-        setTimeout(() => {
-          setIsMinimized(true);
-        }, 8000);
-      } else {
-        throw new Error(result.error || 'Erro no envio');
       }
+
+      // keep chat open and in human mode
+      setChatStep('complete');
     } catch (error) {
       console.error('Error submitting chat data:', error);
       setSubmitStatus('error');
-      
-      // Fallback to direct WhatsApp
-      const whatsappNumber = "5521999887766"; // Replace with actual number
+      addBotMessage('Houve um problema ao salvar seus dados. Vou abrir o WhatsApp direto para você.', 1500);
+      const whatsappNumber = '5521999887766';
       const message = `Olá! Sou ${data.name}. Email: ${data.email}. Telefone: ${data.phone}. Interesse: ${data.interest}. Gostaria de saber mais sobre o Claris Casa & Club.`;
       const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-      
-      addBotMessage("Houve um problema técnico, mas não se preocupe! 😊", 1500);
-      addBotMessage("Vou abrir o WhatsApp diretamente para você continuar a conversa com nosso consultor.", 3000);
-      
-      setTimeout(() => {
-        try {
-          window.open(whatsappUrl, '_blank');
-        } catch (openError) {
-          console.error('Error opening WhatsApp:', openError);
-          addBotMessage(`Você pode nos contatar diretamente pelo WhatsApp: ${whatsappNumber}`, 1000);
-        }
-      }, 5000);
+      setTimeout(() => { try { window.open(whatsappUrl, '_blank'); } catch (_) {} }, 3000);
     } finally {
       setIsSubmitting(false);
     }
@@ -219,6 +319,11 @@ export function ChatWidget() {
       handleSendMessage();
     }
   };
+
+  // When user sends messages after session created, persist them
+  useEffect(() => {
+    // no-op: addUserMessage already persists if sessionId and supabase exist
+  }, [sessionId, supabase]);
 
   const toggleChat = () => {
     setIsOpen(!isOpen);

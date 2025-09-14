@@ -40,12 +40,22 @@ export function AdminDashboard() {
   const [authError, setAuthError] = useState(false);
   let supabaseRef: SupabaseClient | null = null;
 
+  // --- Admin simple login & chat states ---
+  const [adminLoggedIn, setAdminLoggedIn] = useState(false);
+  const [loginUsername, setLoginUsername] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [loginError, setLoginError] = useState('');
+
+  const [adminChats, setAdminChats] = useState<any[]>([]); // { sessionId, lead, messages: [] }
+  const [selectedSession, setSelectedSession] = useState<string | null>(null);
+  const [adminSupabaseInit, setAdminSupabaseInit] = useState(false);
+
   // Load leads from Supabase
   useEffect(() => {
     fetchLeads();
   }, []);
 
-  // ...existing code...
+  // --- Admin login & chat functions ---
   const resolveFetchLeadsUrls = () => {
     const list: string[] = [];
     const fnUrl = import.meta.env.VITE_SUPABASE_FETCH_LEADS_FUNCTION_URL as string | undefined;
@@ -267,6 +277,96 @@ export function AdminDashboard() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+  const initAdminSupabase = () => {
+    try {
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined;
+      const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
+      if (!supabaseUrl || !anonKey) return null;
+      if (!supabaseRef) supabaseRef = createClient(supabaseUrl, anonKey, { auth: { persistSession: false } });
+      setAdminSupabaseInit(true);
+      return supabaseRef;
+    } catch (e) {
+      console.warn('Failed to init admin supabase', e);
+      return null;
+    }
+  };
+
+  const handleAdminLogin = () => {
+    setLoginError('');
+    if (loginUsername === 'ClarisAdmin' && loginPassword === 'Claris@123@') {
+      setAdminLoggedIn(true);
+      initAdminSupabase();
+      // fetch chats after a short delay
+      setTimeout(() => fetchAdminChats(), 300);
+    } else {
+      setLoginError('Credenciais inválidas');
+    }
+  };
+
+  const fetchAdminChats = async () => {
+    const sup = initAdminSupabase();
+    if (!sup) return;
+    try {
+      const { data: sessions } = await sup.from('chat_sessions').select('*').order('created_at', { ascending: false }).limit(1000);
+      const sessionIds = (sessions || []).map((s: any) => s.id).filter(Boolean);
+      const { data: messages } = await sup.from('chat_messages').select('*').in('session_id', sessionIds || []).order('created_at', { ascending: true });
+      const leadIds = (sessions || []).map((s: any) => s.lead_id).filter(Boolean);
+      const { data: leads } = await sup.from('leads').select('*').in('id', leadIds || []).limit(1000);
+
+      const chats = (sessions || []).map((s: any) => {
+        const msgs = (messages || []).filter((m: any) => m.session_id === s.id);
+        const lead = (leads || []).find((l: any) => l.id === s.lead_id) || null;
+        return {
+          sessionId: s.id,
+          sessionRow: s,
+          lead,
+          messages: msgs,
+          lastContact: msgs.length ? msgs[msgs.length - 1].created_at : s.created_at
+        };
+      });
+      setAdminChats(chats);
+      if (chats.length && !selectedLead) {
+        // keep existing selectedLead; select first chat by default
+        setSelectedSession(chats[0].sessionId);
+      }
+      // subscribe to realtime updates (INSERT)
+      try {
+        sup.channel('public:chat_messages')
+          .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'chat_messages' }, (payload: any) => {
+            const rec = payload.new;
+            if (!rec) return;
+            setAdminChats(prev => {
+              const idx = prev.findIndex(c => c.sessionId === rec.session_id);
+              if (idx === -1) {
+                // new session
+                return [{ sessionId: rec.session_id, sessionRow: { id: rec.session_id }, lead: null, messages: [rec], lastContact: rec.created_at }, ...prev];
+              }
+              const copy = [...prev];
+              copy[idx] = { ...copy[idx], messages: [...(copy[idx].messages || []), rec], lastContact: rec.created_at };
+              return copy;
+            });
+          })
+          .subscribe();
+      } catch (e) {
+        console.warn('Realtime subscribe failed', e);
+      }
+
+    } catch (e) {
+      console.warn('Failed to fetch admin chats', e);
+    }
+  };
+
+  const sendAgentMessage = async (sessionId: string, content: string) => {
+    if (!sessionId || !content.trim()) return;
+    const sup = initAdminSupabase();
+    if (!sup) return;
+    try {
+      await sup.from('chat_messages').insert({ session_id: sessionId, sender: 'agent', content });
+    } catch (e) {
+      console.warn('Failed to send agent message', e);
+    }
   };
 
   return (
@@ -664,6 +764,142 @@ export function AdminDashboard() {
             </Card>
           </div>
         )}
+
+        {/* Admin Login & Chat Management */}
+        <div className="mt-8">
+          {!adminLoggedIn ? (
+            <Card>
+              <CardHeader>
+                <CardTitle>Login de Admin</CardTitle>
+                <CardDescription>
+                  Acesse com credenciais de admin para gerenciar chats
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid gap-4">
+                  <div>
+                    <label className="text-sm font-medium text-gray-600">Usuário</label>
+                    <Input
+                      type="text"
+                      placeholder="Usuário admin"
+                      value={loginUsername}
+                      onChange={e => setLoginUsername(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-gray-600">Senha</label>
+                    <Input
+                      type="password"
+                      placeholder="Senha do admin"
+                      value={loginPassword}
+                      onChange={e => setLoginPassword(e.target.value)}
+                    />
+                  </div>
+                  {loginError && (
+                    <p className="text-red-500 text-sm">{loginError}</p>
+                  )}
+                  <Button onClick={handleAdminLogin} className="w-full">
+                    Acessar
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ) : (
+            <div>
+              <div className="mb-4 flex items-center justify-between">
+                <h2 className="text-xl font-semibold">Gerenciamento de Chats</h2>
+                <Button variant="outline" onClick={() => setAdminLoggedIn(false)}>
+                  Sair
+                </Button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div className="col-span-2">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Chats Recentes</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      {adminChats.length === 0 ? (
+                        <div className="text-center py-16">
+                          <p className="text-gray-500">Nenhum chat recente encontrado.</p>
+                        </div>
+                      ) : (
+                        <div className="max-h-80 overflow-y-auto">
+                          {adminChats.map(chat => (
+                            <div
+                              key={chat.sessionId}
+                              className={`p-3 rounded-lg mb-2 cursor-pointer transition-all
+                                ${selectedSession === chat.sessionId ? 'bg-blue-50' : 'hover:bg-gray-50'}`}
+                              onClick={() => setSelectedSession(chat.sessionId)}
+                            >
+                              <div className="flex justify-between text-sm text-gray-500">
+                                <div>
+                                  <strong>{chat.lead ? chat.lead.name : 'Novo Contato'}</strong>
+                                  <div>{chat.lead ? chat.lead.email : 'Sem email'}</div>
+                                </div>
+                                <div className="text-right">
+                                  <div>{new Date(chat.lastContact).toLocaleString('pt-BR')}</div>
+                                  <div className="text-xs">{chat.messages.length} mensagens</div>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                </div>
+
+                <div>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Detalhes do Chat</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      {selectedSession ? (
+                        <div>
+                          {/* Display chat messages and input box */}
+                          <div className="max-h-60 overflow-y-auto mb-4">
+                            {adminChats.find(c => c.sessionId === selectedSession)?.messages.map((msg: any, idx: number) => (
+                              <div key={idx} className={`py-2 ${msg.sender === 'agent' ? 'text-right' : 'text-left'}`}>
+                                <div className={`text-xs ${msg.sender === 'agent' ? 'text-blue-600' : 'text-gray-500'}`}>
+                                  {msg.sender === 'agent' ? 'Você' : msg.sender}:
+                                </div>
+                                <div className={`inline-block rounded-lg px-3 py-2 max-w-xs ${msg.sender === 'agent' ? 'bg-blue-50' : 'bg-gray-100'}`}>
+                                  {msg.content}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+
+                          <div className="flex gap-2">
+                            <Input
+                              placeholder="Digite sua mensagem..."
+                              value={''}
+                              onChange={() => {}}
+                              className="flex-1"
+                            />
+                            <Button
+                              onClick={() => {}}
+                              className="whitespace-nowrap"
+                            >
+                              Enviar
+                            </Button>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="text-center text-gray-500 py-16">
+                          Selecione um chat para ver os detalhes
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
