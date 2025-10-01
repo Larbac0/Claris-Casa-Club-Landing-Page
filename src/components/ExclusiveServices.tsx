@@ -179,20 +179,6 @@ export function ExclusiveServices() {
               </motion.div>
             ))}
           </div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-            viewport={{ once: true }}
-            className="text-center mt-16"
-          >
-            <div className="inline-block bg-[#D4AF37]/10 px-8 py-4 rounded-full">
-              <p className="text-lg text-gray-700">
-                <span className="font-semibold text-[#B8941F]">Atendimento VIP:</span> Seu sonho merece atenção exclusiva
-              </p>
-            </div>
-          </motion.div>
         </div>
       </section>
 
