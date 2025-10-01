@@ -48,7 +48,7 @@ export function AdminDashboard() {
 
   const [adminChats, setAdminChats] = useState<any[]>([]); // { sessionId, lead, messages: [] }
   const [selectedSession, setSelectedSession] = useState<string | null>(null);
-  const [adminSupabaseInit, setAdminSupabaseInit] = useState(false);
+  // const [adminSupabaseInit, setAdminSupabaseInit] = useState(false);
 
   // Load leads from Supabase
   useEffect(() => {
@@ -285,7 +285,7 @@ export function AdminDashboard() {
       const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
       if (!supabaseUrl || !anonKey) return null;
       if (!supabaseRef) supabaseRef = createClient(supabaseUrl, anonKey, { auth: { persistSession: false } });
-      setAdminSupabaseInit(true);
+      // setAdminSupabaseInit(true);
       return supabaseRef;
     } catch (e) {
       console.warn('Failed to init admin supabase', e);
@@ -355,17 +355,6 @@ export function AdminDashboard() {
 
     } catch (e) {
       console.warn('Failed to fetch admin chats', e);
-    }
-  };
-
-  const sendAgentMessage = async (sessionId: string, content: string) => {
-    if (!sessionId || !content.trim()) return;
-    const sup = initAdminSupabase();
-    if (!sup) return;
-    try {
-      await sup.from('chat_messages').insert({ session_id: sessionId, sender: 'agent', content });
-    } catch (e) {
-      console.warn('Failed to send agent message', e);
     }
   };
 
