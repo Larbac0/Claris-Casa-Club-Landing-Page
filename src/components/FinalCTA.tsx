@@ -368,5 +368,14 @@ export function FinalCTA() {
           </motion.div>
       </div>
     </section>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MPV2NW7ND0"></script>
+    <script>
+     window.dataLayer = window.dataLayer || [];
+     function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+     gtag('config', 'G-MPV2NW7ND0');
+   </script>
   );
 }
