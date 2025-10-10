@@ -1,30 +1,77 @@
-# Claris Casa & Clube — Supabase Integration Guide
+# Claris Casa & Clube - Landing Page
 
-Este README documenta os passos necessários para deixar a integração com o Supabase 100% funcional: criação da tabela `leads`, deploy das Supabase Functions, variáveis de ambiente (frontend e functions) e testes básicos.
+Um projeto de landing page premium para o condomínio de luxo Claris Casa & Clube, localizado na Barra da Tijuca, Rio de Janeiro. O projeto foi desenvolvido com foco em performance, design sofisticado e uma experiência de usuário imersiva.
 
-Checklist rápido
-- [ ] Criar tabela `leads` no Supabase (SQL abaixo)
-- [ ] Deploy das functions `create-lead` e `fetch-leads` (ou usar painel web)
-- [ ] Definir envs nas functions (`SUPABASE_SERVICE_ROLE`, `SUPABASE_URL`, `ADMIN_TOKEN`)
-- [ ] Atualizar `.env.local` no projeto com as URLs das functions e `VITE_*` keys
-- [ ] Rodar local e testar `FinalCTA`, `ChatWidget` e `WhatsAppButton`
+## 🚀 Tecnologias
 
-1) Criar tabela `leads` (SQL)
-No Supabase Console → SQL Editor execute a query abaixo:
+- **React 18** com TypeScript
+- **Vite** para build e desenvolvimento rápido
+- **Tailwind CSS v4** para estilização moderna e utilitária
+- **Framer Motion** para animações fluidas e interativas
+- **Radix UI** para componentes de UI acessíveis e robustos
+- **Lucide React** para ícones
+- **Supabase** para backend (armazenamento de leads e functions)
 
-```sql
-create table public.leads (
-  id uuid default gen_random_uuid() primary key,
-  name text,
-  email text,
-  phone text,
-  message text,
-  whatsapp_consent boolean default false,
-  source text,
-  page_url text,
-  page_title text,
-  created_at timestamptz default now()
-);
+## ✨ Funcionalidades
+
+- ✅ **Design Responsivo**: Experiência otimizada para desktops, tablets e celulares.
+- ✅ **Animações Suaves**: Transições e efeitos visuais elegantes com Framer Motion.
+- ✅ **Tour Virtual Interativo**: Galeria de imagens com lightbox e navegação intuitiva.
+- ✅ **Componentes Interativos**: Chat Widget, formulários de contato e botão flutuante de WhatsApp.
+- ✅ **Integração com Backend**: Captura de leads via Supabase Functions com fallback para o client.
+- ✅ **Dashboard Administrativo**: Interface simples para visualização e exportação de leads, acessível via query param.
+- ✅ **SEO Otimizado**: Estrutura semântica e meta tags para melhor ranqueamento.
+
+## 📦 Instalação e Execução
+
+1.  **Clone o repositório:**
+    ```bash
+    git clone <repository-url>
+    cd Claris-Casa-Club-Landing-Page
+    ```
+
+2.  **Instale as dependências:**
+    ```bash
+    npm install
+    ```
+
+3.  **Configure as variáveis de ambiente:**
+    Crie um arquivo `.env.local` na raiz do projeto. Veja a seção Integração com Supabase para mais detalhes.
+
+4.  **Execute o projeto em modo de desenvolvimento:**
+    ```bash
+    npm run dev
+    ```
+    A aplicação estará disponível em `http://localhost:5173` (ou outra porta, se a 5173 estiver em uso).
+
+## 🛠️ Scripts Disponíveis
+
+- `npm run dev`: Inicia o servidor de desenvolvimento com Hot Module Replacement (HMR).
+- `npm run build`: Gera o build de produção otimizado na pasta `dist/`.
+- `npm run preview`: Inicia um servidor local para visualizar o build de produção.
+- `npm run lint`: Executa o linter (ESLint) para análise de código.
+
+## 🏗️ Estrutura do Projeto
+
+```
+src/
+├── components/
+│   ├── ui/                 # Componentes de UI base (Button, Input, etc.)
+│   ├── AdminDashboard.tsx  # Painel de visualização de leads
+│   ├── ChatWidget.tsx      # Widget de chat para captura de leads
+│   ├── FinalCTA.tsx        # Formulário de contato principal
+│   └── ...                 # Outras seções da landing page
+├── lib/
+│   ├── leadsApi.ts         # Lógica para criar e buscar leads (Functions/Client)
+│   └── supabaseClient.ts   # Configuração do client Supabase
+├── styles/
+│   └── globals.css         # Estilos globais e configuração do Tailwind
+└── main.tsx                # Ponto de entrada da aplicação React
+
+supabase/
+└── functions/
+    ├── create-lead/        # Supabase Function para criar um lead
+    └── fetch-leads/        # Supabase Function para buscar leads (protegida)
 ```
 
 2) Supabase Functions (recomendado)
