@@ -4,7 +4,7 @@ import { MessageCircle, X } from 'lucide-react';
 import { createLead } from '../lib/leadsApi';
 
 
-const WHATSAPP_NUMBER = '5521971875960';
+const WHATSAPP_NUMBER = '5521998512321';
 const WHATSAPP_MESSAGE = 'Olá! Gostaria de agendar uma consultoria privada para conhecer o Claris Casa & Clube. Tenho interesse em explorar as oportunidades disponíveis e entender como este projeto pode se alinhar ao meu estilo de vida.';
 
 
